@@ -17,11 +17,12 @@ export default function MovingDot (
   };
 
   return (
-    <div style={{
+    <div className="movingWrapper" style={{
       backgroundColor: '#CCC',
       height: 300,
+      overflow: 'hidden',
       width: '100%'
-    }} ref={wrapper} className="movingWrapper" onPointerMove={handlePointerMove}>
+    }} ref={wrapper} onPointerMove={handlePointerMove}>
       <div className="dot" style={{
         backgroundColor: `${color}`,
         borderRadius: '50%',

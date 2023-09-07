@@ -14,8 +14,8 @@ export default function About() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`main ${inter.className}`}>
-        <h1>Hola desde About Page</h1>
-        <MovingDot color='blue' size={20} />
+        <h1>Ejemplo moving Dot</h1>
+        <MovingDot />
       </main>
     </>
   )

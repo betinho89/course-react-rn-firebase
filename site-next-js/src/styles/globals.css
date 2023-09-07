@@ -105,3 +105,12 @@ a {
     color-scheme: dark;
   }
 }
+
+.custom-button {
+  background-color: #34495E;
+  border-radius: 5px;
+  border: 0;
+  color: #FFF;
+  margin-right: 10px;
+  padding: 10px 20px;
+}

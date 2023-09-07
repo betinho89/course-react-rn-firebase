@@ -46,7 +46,7 @@ El manejo del DOM (Document Object Model) y el uso del DOM Virtual son dos enfoq
 
    * **Problemas de rendimiento**: En aplicaciones complejas con muchas actualizaciones, las actualizaciones frecuentes del DOM pueden llevar a problemas de rendimiento y latencia.
 
-### **DOM Virtual en React**:
+### **DOM Virtual**:
 
    * Virtual DOM: En React, se utiliza un DOM Virtual como intermediario entre la lógica de la aplicación y el DOM del navegador. El Virtual DOM es una representación virtual de la estructura del DOM real.
 
@@ -488,6 +488,39 @@ const people = [{
 ```
 
 2. Usar el método `map()` y `filter()`: El método `map()` itera sobre cada elemento de la lista y devuelve un nuevo array de componentes y el metodo `filter()` filtra los elementos de una lista por el criterio que se proporcione.
+```javascript
+export const people = [{
+  id: 0, // Used in JSX as a key
+  name: 'Creola Katherine Johnson',
+  profession: 'mathematician',
+  accomplishment: 'spaceflight calculations',
+  imageId: 'MK3eW3A'
+}, {
+  id: 1, // Used in JSX as a key
+  name: 'Mario José Molina-Pasquel Henríquez',
+  profession: 'chemist',
+  accomplishment: 'discovery of Arctic ozone hole',
+  imageId: 'mynHUSa'
+}, {
+  id: 2, // Used in JSX as a key
+  name: 'Mohammad Abdus Salam',
+  profession: 'physicist',
+  accomplishment: 'electromagnetism theory',
+  imageId: 'bE7W1ji'
+}, {
+  id: 3, // Used in JSX as a key
+  name: 'Percy Lavon Julian',
+  profession: 'chemist',
+  accomplishment: 'pioneering cortisone drugs, steroids and birth control pills',
+  imageId: 'IOjWm71'
+}, {
+  id: 4, // Used in JSX as a key
+  name: 'Subrahmanyan Chandrasekhar',
+  profession: 'astrophysicist',
+  accomplishment: 'white dwarf star mass calculations',
+  imageId: 'lrWQx8l'
+}];
+```
 ```jsx
 import { people } from './data.js';
 import { getImageUrl } from './utils.js';

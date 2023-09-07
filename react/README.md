@@ -88,7 +88,7 @@ const element = <p>Hello, {name}!</p>;
    * Los atributos en JSX se escriben de manera similar a HTML, pero se usan en formato camelCase en lugar de kebab-case.
 
 ```jsx
-const element = <input type="text" className="my-input" placeholder="Enter your name" />;
+const element = <input type="text" className="my-input" placeholder="Enter your name" style={{ marginTop: 10, paddingLeft: 5, display: 'flex' }} />;
 ```
 
 4. **Elementos JSX anidados**:
@@ -109,8 +109,8 @@ const element = (
    * En React, los componentes también se definen utilizando JSX. Puedes crear tus propios componentes personalizados y utilizarlos en otros componentes.
 
 ```jsx
-function MyComponente(props) {
-  return <p>{props.message}</p>;
+function MyComponente({ message }) {
+  return <p>{message}</p>;
 }
 ```
 
@@ -123,14 +123,16 @@ function MyComponente(props) {
 ```jsx
 export default function Bio() {
   return (
-    <div class="intro">
-      <h1>Welcome to my website!</h1>
+    <div className="wrapper">
+      <div className="intro">
+        <h1>Welcome to my website!</h1>
+      </div>
+      <p className="summary">
+        You can find my thoughts here.
+        <br><br>
+        <b>And <i>pictures</b></i> of scientists!
+      </p>
     </div>
-    <p class="summary">
-      You can find my thoughts here.
-      <br><br>
-      <b>And <i>pictures</b></i> of scientists!
-    </p>
   );
 }
 ```
@@ -144,7 +146,7 @@ export default function Image() {
   return <img
     src="https://i.imgur.com/yXOvdOSs.jpg"
     alt="Hedy Lamarr"
-    class="photo"
+    className="photo"
   />;
 }
 ```

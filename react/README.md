@@ -184,7 +184,7 @@ Con una función (uso de useState):
 import React, { useState } from 'react';
 
 function MyComponent() {
-  const [count, setContador] = useState(0);
+  const [count, setCount] = useState(0);
 
   // ...
 }
@@ -211,7 +211,7 @@ En una clase:
 this.setState({ count: 1 });
 
 // En una función
-setContador(1);
+setCount(1);
 ```
 En el caso de la actualización del estado entraremos más a detalle porque existen diferentes casos que se nos pueden presentar, a continuación les muestro varios ejemplos.
 
@@ -332,11 +332,11 @@ import React, { useState } from 'react';
 
 function Contador() {
   // Declaramos una variable de estado llamada "count" y su función para actualizarlo
-  const [count, setContador] = useState(0);
+  const [count, setCount] = useState(0);
 
   const incrementarContador = () => {
     // Actualizamos el estado sumándole 1
-    setContador(count + 1);
+    setCount(count + 1);
   };
 
   return (
@@ -549,6 +549,545 @@ export default function List() {
   return <ul>{listItems}</ul>;
 }
 ```
+
+## Ciclo de vida de un Componente
+
+Los componentes funcionales en React no tienen un ciclo de vida tan completo como los componentes de clase, pero aún así tienen ciertas etapas importantes en su "ciclo de vida funcional" que se gestionan mediante hooks. Aquí tienes una descripción de las principales etapas en el ciclo de vida de un componente funcional en React:
+
+1. **Montaje (Mounting)**:
+
+   * `useEffect(() => {}, [])`: Este hook se ejecuta una vez después de que el componente se haya montado en el DOM. Se utiliza principalmente para tareas de inicialización, como la configuración de efectos secundarios, solicitudes de red o suscripciones.
+
+```jsx
+import React, { useEffect } from 'react';
+
+function MountComponent() {
+  useEffect(() => {
+    console.log('El componente se ha montado.');
+    // Realiza tareas de inicialización aquí
+  }, []);
+
+  return (
+    <div>
+      {/* Contenido del componente */}
+    </div>
+  );
+}
+
+export default MountComponent;
+```
+
+2. **Actualización (Updating)**:
+
+   * `useEffect(() => {})`: Puedes utilizar este hook para realizar tareas cuando el componente se actualiza debido a cambios en el estado o las props. Se ejecuta después de cada renderizado.
+
+```jsx
+import React, { useEffect, useState } from 'react';
+
+function UpdateComponent() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    console.log('El componente se ha actualizado.');
+    // Realiza tareas de actualización aquí
+  });
+
+  return (
+    <div>
+      <p>Contador: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Incrementar</button>
+    </div>
+  );
+}
+
+export default UpdateComponent;
+```
+
+3. **Desmontaje (Unmounting)**:
+
+   * `useEffect(() => { return () => {} })`: Si devuelves una función en el hook useEffect, esta se ejecutará cuando el componente se desmonte. Es útil para limpiar efectos secundarios, como desconectar eventos o cancelar solicitudes de red.
+
+```jsx
+import React, { useEffect } from 'react';
+
+function UnmountingComponent() {
+  useEffect(() => {
+    console.log('El componente se ha montado.');
+
+    return () => {
+      console.log('El componente se desmontará.');
+      // Realiza limpieza de recursos aquí
+    };
+  }, []);
+
+  return (
+    <div>
+      {/* Contenido del componente */}
+    </div>
+  );
+}
+
+export default UnmountingComponent;
+```
+
+Estas son las principales etapas en el ciclo de vida de un componente funcional en React. Los hooks, como useEffect, te permiten gestionar estas etapas de manera más simple y declarativa en componentes funcionales. Ten en cuenta que los componentes funcionales no tienen métodos de ciclo de vida como los componentes de clase, y el ciclo de vida funcional se gestiona principalmente mediante los hooks disponibles en React.
+
+## Formularios
+
+El manejo de formularios en React es una tarea común en muchas aplicaciones web. A continuación, te mostraré un ejemplo práctico de cómo manejar un formulario en React utilizando componentes funcionales y hooks, en particular, el hook `useState`. Crearemos un formulario simple para ingresar el nombre y el correo electrónico de un usuario y luego mostraremos los datos ingresados en la pantalla.
+
+```jsx
+import React, { useState } from 'react';
+
+function Formulario() {
+  // Definimos estados para el nombre y el correo electrónico
+  const [nombre, setNombre] = useState('');
+  const [correo, setCorreo] = useState('');
+
+  // Función para manejar el envío del formulario
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Evita que la página se recargue
+    // Aquí puedes realizar acciones como enviar los datos al servidor
+    console.log(`Nombre: ${nombre}, Correo Electrónico: ${correo}`);
+  };
+
+  return (
+    <div>
+      <h1>Formulario React</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="nombre">Nombre:</label>
+          <input
+            type="text"
+            id="nombre"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="correo">Correo Electrónico:</label>
+          <input
+            type="email"
+            id="correo"
+            value={correo}
+            onChange={(e) => setCorreo(e.target.value)}
+          />
+        </div>
+        <button type="submit">Enviar</button>
+      </form>
+      {/* Mostrar los datos ingresados */}
+      <div>
+        <h2>Datos Ingresados:</h2>
+        <p>Nombre: {nombre}</p>
+        <p>Correo Electrónico: {correo}</p>
+      </div>
+    </div>
+  );
+}
+
+export default Formulario;
+```
+
+## Componentes Controlados y no Controlados
+
+En React, los componentes controlados y no controlados son dos enfoques diferentes para gestionar los datos en formularios y otros elementos de entrada de usuario. Cada uno tiene sus propias ventajas y casos de uso. Aquí te explico las diferencias entre ellos:
+
+### Componentes Controlados:
+
+Un componente controlado es aquel en el que React controla y mantiene el estado de un elemento de entrada, como un campo de texto o un cuadro de selección. Para crear un componente controlado, debes vincular el valor del elemento de entrada al estado de React y proporcionar una función de control para manejar los cambios en ese valor. Esto permite a React tener un control total sobre el valor y su comportamiento.
+
+Ejemplo de un componente controlado con un campo de entrada de texto:
+```jsx
+import React, { useState } from 'react';
+
+function ComponenteControlado() {
+  const [valor, setValor] = useState('');
+
+  const handleChange = (event) => {
+    setValor(event.target.value);
+  };
+
+  return (
+    <input
+      type="text"
+      value={valor}
+      onChange={handleChange}
+    />
+  );
+}
+```
+Ventajas de los componentes controlados:
+
+* React mantiene el estado y el valor del elemento de entrada, lo que facilita la sincronización con otros componentes y la manipulación de datos.
+
+* Puedes realizar validaciones en tiempo real y controlar las interacciones de usuario de manera más precisa.
+
+### Componentes No Controlados:
+
+Un componente no controlado es aquel en el que React no controla directamente el valor del elemento de entrada. En lugar de eso, el valor se maneja a través del DOM y se accede a él cuando sea necesario utilizando referencias (ref). Los componentes no controlados son útiles en situaciones donde deseas un acceso directo al DOM o cuando necesitas trabajar con bibliotecas o código legado que no se adapta bien a la filosofía de React.
+
+Ejemplo de un componente no controlado con un campo de entrada de texto:
+```jsx
+import React, { useRef } from 'react';
+
+function ComponenteNoControlado() {
+  const inputRef = useRef(null);
+
+  const handleClick = () => {
+    alert(`Valor del campo de entrada: ${inputRef.current.value}`);
+  };
+
+  return (
+    <div>
+      <input type="text" ref={inputRef} />
+      <button onClick={handleClick}>Mostrar Valor</button>
+    </div>
+  );
+}
+```
+
+Ventajas de los componentes no controlados:
+
+* Puedes acceder directamente al DOM y a los valores de los elementos de entrada.
+* Son útiles en situaciones específicas, como la integración con bibliotecas de terceros o código legacy.
+
+En resumen, la elección entre componentes controlados y no controlados depende de las necesidades específicas de tu aplicación y de si deseas que React controle y mantenga el estado de los elementos de entrada o si prefieres un control más directo sobre el DOM y los valores de entrada. Ambos enfoques son válidos y tienen sus propios casos de uso.
+
+## Hooks
+
+React ofrece una variedad de hooks que te permiten añadir funcionalidad a tus componentes funcionales. A continuación, te presento algunos de los hooks más importantes y ampliamente utilizados.
+
+### 1. useEffect
+
+El hook `useEffect` en React se utiliza para realizar efectos secundarios en componentes funcionales. Un efecto secundario es cualquier operación que no esté directamente relacionada con la renderización de tu componente, como hacer solicitudes HTTP, suscribirse a eventos, manipular el DOM, etc. `useEffect` es esencial para gestionar ciclos de vida, suscripciones y tareas asíncronas en componentes funcionales.
+
+La sintaxis general de `useEffect` es la siguiente:
+```jsx
+useEffect(() => {
+}, [dependencias]);
+```
+
+* La función que pasas como primer argumento a useEffect contiene el código para tus efectos secundarios.
+* El segundo argumento es un array de dependencias (opcional). Si este array está presente, el efecto se ejecutará cada vez que una de las dependencias cambie. Si se omite, el efecto se ejecutará después de cada renderizado.
+
+#### Mounting Effect
+
+```jsx
+import React, { useState, useEffect } from 'react';
+
+function TestMounting() {
+  const [count, setCount] = useState(0);
+
+  // Efecto de montaje
+  useEffect(() => {
+    document.title = `Contador: ${count}`;
+  }, [count]);
+
+  return (
+    <div>
+      <p>Contador: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Incrementar</button>
+    </div>
+  );
+}
+
+export default TestMounting;
+```
+En este ejemplo, utilizamos `useEffect` para actualizar el título del documento cada vez que el contador cambia. El efecto se ejecutará cuando el componente se monte inicialmente y cuando contador cambie.
+
+#### Request Data
+
+```jsx
+import React, { useState, useEffect } from 'react';
+
+function TestRequestHttp() {
+  const [data, setData] = useState(null);
+
+  // Efecto de solicitud HTTP
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/posts/1')
+      .then((response) => response.json())
+      .then((data) => setData(data));
+  }, []);
+
+  return (
+    <div>
+      <h1>Datos de la Solicitud HTTP</h1>
+      {data ? (
+        <p>Título: {data.title}</p>
+      ) : (
+        <p>Cargando datos...</p>
+      )}
+    </div>
+  );
+}
+
+export default TestRequestHttp;
+```
+
+#### Cleaning functions
+
+```jsx
+import { useState, useEffect } from 'react';
+
+export default function App() {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    function handleMove(e) {
+      setPosition({ x: e.clientX, y: e.clientY });
+    }
+    window.addEventListener('pointermove', handleMove);
+    return () => {
+      window.removeEventListener('pointermove', handleMove);
+    };
+  }, []);
+
+  return (
+    <div style={{
+      position: 'absolute',
+      backgroundColor: 'pink',
+      borderRadius: '50%',
+      opacity: 0.6,
+      transform: `translate(${position.x}px, ${position.y}px)`,
+      pointerEvents: 'none',
+      left: -20,
+      top: -20,
+      width: 40,
+      height: 40,
+    }} />
+  );
+}
+```
+
+Estos ejemplos ilustran cómo puedes utilizar useEffect en componentes funcionales de React para gestionar efectos secundarios, como actualizaciones del título del documento, solicitudes HTTP y tareas de limpieza. El hook useEffect es una herramienta poderosa que te permite agregar funcionalidad adicional a tus componentes funcionales y controlar el ciclo de vida de tus componentes de manera efectiva.
+
+### 2. useContext
+
+El hook useContext en React se utiliza para acceder a un contexto específico desde cualquier lugar en un componente funcional. Los contextos son una forma de compartir datos entre componentes en un árbol de componentes sin tener que pasar explícitamente props a través de cada nivel de la jerarquía. useContext simplifica la forma en que puedes acceder a esos datos globales.
+
+### Creación de un Contexto
+
+Para utilizar useContext, primero debes crear un contexto utilizando React.createContext. Esto se hace normalmente en un archivo separado para mantener tu código organizado.
+```jsx
+// context.js
+import React from 'react';
+
+const MiContexto = React.createContext();
+
+export default MiContexto;
+```
+
+### Proveedor de Contexto
+
+Luego, en el componente superior de tu aplicación, debes proporcionar un valor al contexto utilizando el componente Context.Provider.
+
+```jsx
+// App.js
+import React from 'react';
+import MiContexto from './context';
+
+function App() {
+  const valorContexto = "¡Hola desde el contexto!";
+
+  return (
+    <MiContexto.Provider value={valorContexto}>
+      {/* Aquí van tus componentes */}
+    </MiContexto.Provider>
+  );
+}
+
+export default App;
+```
+
+### Consumo de Contexto con useContext
+
+Ahora, puedes consumir el contexto en cualquier componente funcional que esté debajo del MiContexto.Provider utilizando el hook useContext.
+```jsx
+// Componente.js
+import React, { useContext } from 'react';
+import MiContexto from './context';
+
+function Componente() {
+  const valorContexto = useContext(MiContexto);
+
+  return <div>{valorContexto}</div>;
+}
+
+export default Componente;
+```
+
+En este ejemplo, el componente Componente puede acceder al valor del contexto MiContexto utilizando useContext y mostrarlo en su renderizado.
+
+### 3. useCallback
+
+El hook useCallback en React se utiliza para memorizar funciones y evitar que se re-creen en cada renderizado de un componente funcional. Cuando una función se crea de nuevo en cada renderizado, puede causar problemas de rendimiento en componentes hijos que dependen de esta función como prop, ya que los componentes pueden volver a renderizarse innecesariamente. useCallback soluciona este problema al garantizar que la función se mantenga constante a menos que sus dependencias cambien.
+
+La sintaxis general de useCallback es la siguiente:
+```jsx
+const memoizedCallback = useCallback(
+  () => {
+    // Código de la función
+  },
+  [dependencias]
+);
+```
+
+* El primer argumento es la función que deseas memorizar.
+* El segundo argumento es un array de dependencias. La función se memorizará nuevamente si alguna de estas dependencias cambia.
+
+Supongamos que tenemos un componente que muestra una lista de elementos y un botón que permite agregar un nuevo elemento a la lista. Utilizaremos useCallback para memorizar la función que maneja la adición de elementos.
+
+```jsx
+import React, { useState, useCallback } from 'react';
+
+function ListaDeElementos() {
+  const [elementos, setElementos] = useState([]);
+  const [nuevoElemento, setNuevoElemento] = useState('');
+
+  // Usamos useCallback para memorizar la función de agregar elementos
+  const agregarElemento = useCallback(() => {
+    setElementos([...elementos, nuevoElemento]);
+    setNuevoElemento('');
+  }, [elementos, nuevoElemento]);
+
+  return (
+    <div>
+      <ul>
+        {elementos.map((elemento, index) => (
+          <li key={index}>{elemento}</li>
+        ))}
+      </ul>
+      <input
+        type="text"
+        value={nuevoElemento}
+        onChange={(e) => setNuevoElemento(e.target.value)}
+      />
+      <button onClick={agregarElemento}>Agregar</button>
+    </div>
+  );
+}
+
+export default ListaDeElementos;
+```
+1. Creamos una función `agregarElemento` que agrega un nuevo elemento a la lista elementos. Utilizamos `useCallback` para memorizar esta función.
+
+2. Dentro de `useCallback`, incluimos elementos y nuevoElemento como dependencias. Esto asegura que la función agregarElemento se memorizará nuevamente solo cuando estas dependencias cambien.
+
+3. Cuando se hace clic en el botón "Agregar", la función agregarElemento se ejecutará sin problemas, y no se volverá a crear en cada renderizado del componente.
+
+`useCallback` es útil en situaciones donde deseas evitar que las funciones se vuelvan a crear innecesariamente, especialmente cuando estas funciones se pasan como props a componentes hijos y quieres optimizar el rendimiento de tu aplicación.
+
+### 4. useRef
+
+El hook useRef en React se utiliza para crear y mantener una referencia mutable a un elemento del DOM o para almacenar valores mutables que no provocan una nueva renderización cuando cambian. useRef es especialmente útil para acceder a elementos del DOM directamente y para mantener datos que no deben afectar el ciclo de vida o el rendimiento del componente.
+
+### Creación de una referencia a un elemento del DOM:
+
+Puedes utilizar useRef para obtener una referencia a un elemento del DOM asignándolo a la propiedad ref de un elemento JSX. A continuación, se muestra un ejemplo:
+
+```jsx
+import React, { useRef, useEffect } from 'react';
+
+function ComponenteConRef() {
+  const miRef = useRef(null);
+
+  useEffect(() => {
+    // Acceder al elemento del DOM utilizando la referencia
+    miRef.current.focus();
+  }, []);
+
+  return (
+    <div>
+      <input type="text" ref={miRef} />
+    </div>
+  );
+}
+```
+### Almacenamiento de valores mutables:
+
+Además de las referencias de elementos del DOM, useRef se puede utilizar para almacenar valores mutables que no causarán una nueva renderización cuando cambien.
+
+```jsx
+import { useRef } from 'react';
+
+export default function Counter() {
+  let ref = useRef(0);
+
+  function handleClick() {
+    ref.current = ref.current + 1;
+    alert('You clicked ' + ref.current + ' times!');
+  }
+
+  return (
+    <button onClick={handleClick}>
+      Click me!
+    </button>
+  );
+}
+```
+
+### Notas importantes:
+1. Cuando se actualiza una referencia a un elemento del DOM utilizando useRef, React no volverá a renderizar el componente. Esto puede ser útil cuando necesitas realizar operaciones imperativas en el DOM.
+
+2. Las referencias de useRef persisten entre renderizaciones. Esto significa que el valor almacenado en una referencia se mantendrá constante entre renderizaciones del componente.
+
+En resumen, useRef es una herramienta versátil en React que se utiliza para mantener referencias a elementos del DOM y almacenar valores mutables que no deben causar nuevas renderizaciones. Puedes usarlo para realizar operaciones imperativas en el DOM o para mantener datos que no afecten el ciclo de vida o el rendimiento de tu componente.
+
+### 5. useMemo
+
+El hook useMemo en React se utiliza para memorizar valores calculados y evitar su recalculación en cada renderizado de un componente funcional. Su objetivo principal es optimizar el rendimiento de la aplicación al reducir el costo de cálculos costosos que no deben realizarse repetidamente. useMemo toma una función de cálculo y una matriz de dependencias y devuelve el resultado memorizado de esa función.
+
+```jsx
+const memoizedValue = useMemo(() => {
+  // Código para calcular el valor
+}, [dependencias]);
+```
+   * El primer argumento es una función que calcula el valor que deseas memorizar.
+   * El segundo argumento es una matriz de dependencias. El valor memorizado se recalcula solo si alguna de estas dependencias cambia.
+
+Supongamos que tenemos un componente que muestra el factorial de un número dado. El cálculo del factorial es una operación costosa, por lo que queremos memorizar el resultado para evitar cálculos innecesarios.
+
+```jsx
+import React, { useState, useMemo } from 'react';
+
+function FactorialCalculadora({ numero }) {
+  // Utilizamos useMemo para memorizar el cálculo del factorial
+  const factorial = useMemo(() => {
+    console.log(`Calculando factorial de ${numero}`);
+    let result = 1;
+    for (let i = 1; i <= numero; i++) {
+      result *= i;
+    }
+    return result;
+  }, [numero]);
+
+  return (
+    <div>
+      <p>Factorial de {numero}: {factorial}</p>
+    </div>
+  );
+}
+```
+**Donde:**
+
+1. Creamos un componente FactorialCalculadora que toma un número como prop.
+2. Utilizamos useMemo para calcular y memorizar el factorial del número. La función de cálculo se ejecutará solo cuando numero cambie.
+3. En el renderizado, mostramos el valor memorizado del factorial.
+
+Cada vez que cambia el número, useMemo vuelve a calcular el factorial y memoriza el resultado. Si el número no cambia, el resultado memorizado se reutiliza y no se realiza un nuevo cálculo. Esto mejora el rendimiento, especialmente en situaciones donde los cálculos son costosos.
+
+### Usos comunes de useMemo:
+   * **Optimización de renderizaciones**: Cuando tienes cálculos costosos en componentes que no deben ejecutarse en cada renderizado.
+   * **Memorización de componentes**: Puedes memorizar componentes enteros para evitar su recreación en cada renderizado.
+
+```jsx
+const memoizedComponent = useMemo(() => <Componente />, []);
+```
+
+   * **Optimización de props**: Si tienes props que son objetos grandes y cambian raramente, puedes memorizarlos para evitar que los componentes secundarios se vuelvan a renderizar innecesariamente.
+
+En resumen, useMemo es una herramienta poderosa para optimizar el rendimiento de componentes funcionales en React al memorizar valores calculados. Debes utilizarlo en situaciones donde los cálculos sean costosos y no necesites recalcularlos en cada renderizado. Sin embargo, ten en cuenta que su uso excesivo puede aumentar la complejidad de tu código, por lo que debes aplicarlo con prudencia.
 
 ## Patrones de Diseño
 

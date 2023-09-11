@@ -475,3 +475,282 @@ export default function Stopwatch() {
   );
 }
 ```
+
+## Login / Dashboard React Route
+
+Para crear una aplicación web con React que permita iniciar sesión utilizando useContext y que gestione rutas para redirigir a un componente "Dashboard" cuando el usuario esté autenticado, puedes seguir estos pasos:
+
+Asegúrate de tener React Router instalado en tu proyecto. Si aún no lo tienes instalado, puedes hacerlo ejecutando npm install react-router-dom o yarn add react-router-dom, según tu gestor de paquetes.
+
+Configura el contexto de autenticación:
+Crea un contexto para gestionar la autenticación en tu aplicación. Esto es similar a lo que se mostró en la respuesta anterior. Aquí, configuraremos un contexto de autenticación simple que rastree si el usuario está autenticado o no.
+
+```jsx
+// AuthContext.js
+import React, { createContext, useContext, useState } from 'react';
+
+const AuthContext = createContext();
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
+
+export const AuthProvider = ({ children }) => {
+  const [authenticated, setAuthenticated] = useState(false);
+
+  const login = () => {
+    setAuthenticated(true);
+  };
+
+  const logout = () => {
+    setAuthenticated(false);
+  };
+
+  return (
+    <AuthContext.Provider value={{ authenticated, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+```
+
+Configura las rutas:
+Utiliza React Router para configurar las rutas en tu aplicación. Define rutas protegidas que requieran autenticación y redirige a la página de inicio de sesión si el usuario no está autenticado.
+
+```jsx
+// App.js
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { Layout } from 'antd';
+import LoginComponent from './LoginComponent';
+import DashboardComponent from './DashboardComponent';
+import { AuthProvider, useAuth } from './AuthContext';
+
+const { Content } = Layout;
+
+function App() {
+  const { authenticated } = useAuth();
+
+  return (
+    <Router>
+      <AuthProvider>
+        <Layout style={{ minHeight: '100vh' }}>
+          <Content style={{ padding: '50px' }}>
+            <Switch>
+              <Route path="/login">
+                {authenticated ? <Redirect to="/dashboard" /> : <LoginComponent />}
+              </Route>
+              <PrivateRoute path="/dashboard" authenticated={authenticated}>
+                <DashboardComponent />
+              </PrivateRoute>
+              <Redirect from="/" to="/login" />
+            </Switch>
+          </Content>
+        </Layout>
+      </AuthProvider>
+    </Router>
+  );
+}
+
+const PrivateRoute = ({ children, authenticated, ...rest }) => (
+  <Route
+    {...rest}
+    render={({ location }) =>
+      authenticated ? (
+        children
+      ) : (
+        <Redirect to={{ pathname: '/login', state: { from: location } }} />
+      )
+    }
+  />
+);
+
+export default App;
+```
+
+Componentes de inicio de sesión y dashboard:
+Crea los componentes LoginComponent y DashboardComponent. LoginComponent debe permitir al usuario iniciar sesión y DashboardComponent es la página a la que se redirige cuando el usuario está autenticado.
+
+```jsx
+// LoginComponent.js
+import React from 'react';
+import { Button } from 'antd';
+import { useAuth } from './AuthContext';
+
+function LoginComponent() {
+  const { login } = useAuth();
+
+  const handleLogin = () => {
+    login();
+  };
+
+  return (
+    <div>
+      <h1>Iniciar Sesión</h1>
+      <Button type="primary" onClick={handleLogin}>
+        Iniciar Sesión
+      </Button>
+    </div>
+  );
+}
+
+export default LoginComponent;
+jsx
+Copy code
+// DashboardComponent.js
+import React from 'react';
+import { useAuth } from './AuthContext';
+
+function DashboardComponent() {
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <p>Bienvenido al panel de control.</p>
+      <button onClick={handleLogout}>Cerrar Sesión</button>
+    </div>
+  );
+}
+
+export default DashboardComponent;
+```
+
+En este ejemplo:
+
+Configuramos rutas protegidas utilizando PrivateRoute, que redirige a la página de inicio de sesión si el usuario no está autenticado.
+
+En App.js, utilizamos useAuth() para acceder al estado de autenticación en el componente principal y decidir qué componente renderizar en función del estado.
+
+LoginComponent y DashboardComponent son componentes simples que interactúan con el contexto de autenticación para iniciar sesión y cerrar sesión.
+
+Con estos pasos, has creado una aplicación web con React que permite iniciar sesión utilizando useContext y gestiona rutas para redirigir al usuario a un panel de control ("dashboard") cuando está autenticado. Asegúrate de adaptar la lógica de autenticación y los componentes según las necesidades de tu aplicación.
+
+-------------------------------------------------------------------------------------
+
+```jsx
+// AuthContext.js
+import React, { createContext, useContext, useState } from 'react';
+
+const AuthContext = createContext();
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+
+  const login = (username, password) => {
+    // Aquí podrías realizar la lógica de autenticación, por ejemplo, con una solicitud HTTP
+    // En este ejemplo, simplemente establecemos un usuario si las credenciales son válidas
+    if (username === 'usuario' && password === 'contraseña') {
+      setUser({ username });
+    }
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+```
+
+Crea un componente de inicio de sesión utilizando Ant Design:
+```jsx
+// LoginComponent.js
+import React, { useState } from 'react';
+import { Form, Input, Button, message } from 'antd';
+import { useAuth } from './AuthContext';
+
+const LoginComponent = () => {
+  const { login } = useAuth();
+  const [loading, setLoading] = useState(false);
+
+  const onFinish = async (values) => {
+    setLoading(true);
+    try {
+      // Simula una solicitud HTTP de inicio de sesión
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      login(values.username, values.password);
+      message.success('Inicio de sesión exitoso');
+    } catch (error) {
+      message.error('Credenciales incorrectas');
+    }
+    setLoading(false);
+  };
+
+  return (
+    <Form
+      name="login"
+      onFinish={onFinish}
+      initialValues={{ username: '', password: '' }}
+    >
+      <Form.Item
+        label="Usuario"
+        name="username"
+        rules={[{ required: true, message: 'Por favor, ingrese su usuario' }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Contraseña"
+        name="password"
+        rules={[{ required: true, message: 'Por favor, ingrese su contraseña' }]}
+      >
+        <Input.Password />
+      </Form.Item>
+
+      <Form.Item>
+        <Button type="primary" htmlType="submit" loading={loading}>
+          Iniciar Sesión
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default LoginComponent;
+```
+
+Crea un componente de aplicación principal que utilice AuthProvider para proporcionar el contexto de autenticación:
+```jsx
+// App.js
+import React from 'react';
+import { Layout } from 'antd';
+import LoginComponent from './LoginComponent';
+import { AuthProvider } from './AuthContext';
+
+const { Content } = Layout;
+
+function App() {
+  return (
+    <AuthProvider>
+      <Layout style={{ minHeight: '100vh' }}>
+        <Content style={{ padding: '50px' }}>
+          <h1>Iniciar Sesión</h1>
+          <LoginComponent />
+        </Content>
+      </Layout>
+    </AuthProvider>
+  );
+}
+
+export default App;
+```
+
+En este ejemplo:
+
+AuthProvider proporciona el contexto de autenticación a todos los componentes descendientes.
+LoginComponent utiliza el contexto de autenticación para realizar el inicio de sesión simulado.
+Asegúrate de personalizar la lógica de autenticación según tus necesidades reales en la función login del contexto de autenticación. Este ejemplo utiliza una lógica de autenticación simple para demostración.

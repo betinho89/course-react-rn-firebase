@@ -974,7 +974,7 @@ export default ListaDeElementos;
 
 2. Dentro de `useCallback`, incluimos elementos y nuevoElemento como dependencias. Esto asegura que la función agregarElemento se memorizará nuevamente solo cuando estas dependencias cambien.
 
-3. Cuando se hace clic en el botón "Agregar", la función agregarElemento se ejecutará sin problemas, y no se volverá a crear en cada renderizado del componente.
+3. Cuando se hace clic en el botón "Agregar", la función `agregarElemento` se ejecutará sin problemas, y no se volverá a crear en cada renderizado del componente.
 
 `useCallback` es útil en situaciones donde deseas evitar que las funciones se vuelvan a crear innecesariamente, especialmente cuando estas funciones se pasan como props a componentes hijos y quieres optimizar el rendimiento de tu aplicación.
 

@@ -13,6 +13,7 @@ function App() {
     await new Promise(
       resolve => setTimeout(resolve, 5000)
     );
+    console.log(`Username: ${values.username}, Password: ${values.password}`);
     login();
     setLoading(false);
   };
@@ -29,18 +30,30 @@ function App() {
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             onFinish={onSubmit}
+            initialValues={{
+              username: '',
+              password: ''
+            }}
           >
             <Form.Item
               label="Usuario"
+              name="username"
               rules={[
-                { required: true },
+                {
+                  required: true,
+                  message: 'Nombre de usuario requerido!'
+                },
               ]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               label="Contraseña"
-              rules={[{ required: true }]}
+              name="password"
+              rules={[{
+                required: true,
+                message: 'Contraseña requerida!'
+              }]}
             >
               <Input.Password />
             </Form.Item>

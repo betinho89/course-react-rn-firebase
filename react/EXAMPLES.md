@@ -754,3 +754,298 @@ En este ejemplo:
 AuthProvider proporciona el contexto de autenticación a todos los componentes descendientes.
 LoginComponent utiliza el contexto de autenticación para realizar el inicio de sesión simulado.
 Asegúrate de personalizar la lógica de autenticación según tus necesidades reales en la función login del contexto de autenticación. Este ejemplo utiliza una lógica de autenticación simple para demostración.
+
+# Complete example
+
+Para crear una aplicación web con React que utilice `useContext` para almacenar la información del usuario y el JWT (JSON Web Token) después de iniciar sesión, y que muestre una tabla con la lista de usuarios y opciones para editar o crear un usuario, puedes seguir estos pasos:
+
+Asegúrate de tener React Router y Ant Design (antd) instalados en tu proyecto. Si aún no lo has hecho, puedes hacerlo ejecutando `npm install react-router-dom antd` o `yarn add react-router-dom antd`, según tu gestor de paquetes.
+
+1. **Configura el contexto de autenticación:**
+
+Crea un contexto para gestionar la autenticación en tu aplicación. En este contexto, mantendremos la información del usuario y el JWT después de iniciar sesión.
+
+```jsx
+// AuthContext.js
+import React, { createContext, useContext, useState } from 'react';
+
+const AuthContext = createContext();
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+
+  const login = (userData, jwt) => {
+    setUser(userData);
+    setToken(jwt);
+  };
+
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, token, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+```
+
+2. **Configura rutas con React Router:**
+
+Configura las rutas de tu aplicación utilizando React Router. Define una ruta protegida para la página principal que muestra la lista de usuarios y opciones para editar o crear usuarios.
+
+```jsx
+// App.js
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { Layout } from 'antd';
+import LoginComponent from './LoginComponent';
+import DashboardComponent from './DashboardComponent';
+import { AuthProvider, useAuth } from './AuthContext';
+
+const { Content } = Layout;
+
+function App() {
+  const { token } = useAuth();
+
+  return (
+    <Router>
+      <AuthProvider>
+        <Layout style={{ minHeight: '100vh' }}>
+          <Content style={{ padding: '50px' }}>
+            <Switch>
+              <Route path="/login">
+                {token ? <Redirect to="/dashboard" /> : <LoginComponent />}
+              </Route>
+              <PrivateRoute path="/dashboard" token={token}>
+                <DashboardComponent />
+              </PrivateRoute>
+              <Redirect from="/" to="/login" />
+            </Switch>
+          </Content>
+        </Layout>
+      </AuthProvider>
+    </Router>
+  );
+}
+
+const PrivateRoute = ({ children, token, ...rest }) => (
+  <Route
+    {...rest}
+    render={({ location }) =>
+      token ? (
+        children
+      ) : (
+        <Redirect to={{ pathname: '/login', state: { from: location } }} />
+      )
+    }
+  />
+);
+
+export default App;
+```
+
+3. **Crea un componente de inicio de sesión:**
+
+Crea un componente de inicio de sesión que permita al usuario iniciar sesión y que utilice el contexto de autenticación para almacenar el JWT y la información del usuario después de iniciar sesión.
+
+```jsx
+// LoginComponent.js
+import React, { useState } from 'react';
+import { Form, Input, Button, message } from 'antd';
+import { useAuth } from './AuthContext';
+
+function LoginComponent() {
+  const { login } = useAuth();
+  const [loading, setLoading] = useState(false);
+
+  const onFinish = async (values) => {
+    setLoading(true);
+    try {
+      // Simula una solicitud HTTP de inicio de sesión
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const userData = { username: values.username }; // Reemplaza con la información real del usuario
+      const jwt = 'jwt.token.here'; // Reemplaza con el token JWT real
+      login(userData, jwt);
+      message.success('Inicio de sesión exitoso');
+    } catch (error) {
+      message.error('Credenciales incorrectas');
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div>
+      <h1>Iniciar Sesión</h1>
+      <Form
+        name="login"
+        onFinish={onFinish}
+        initialValues={{ username: '', password: '' }}
+      >
+        <Form.Item
+          label="Usuario"
+          name="username"
+          rules={[{ required: true, message: 'Por favor, ingrese su usuario' }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Contraseña"
+          name="password"
+          rules={[{ required: true, message: 'Por favor, ingrese su contraseña' }]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            Iniciar Sesión
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
+  );
+}
+
+export default LoginComponent;
+```
+
+4. **Crea un componente de dashboard:**
+
+Crea un componente de dashboard que muestre la lista de usuarios y opciones para editar o crear usuarios. Asegúrate de proteger esta ruta con `PrivateRoute` para que solo los usuarios autenticados puedan acceder a ella.
+
+```jsx
+// DashboardComponent.js
+import React from 'react';
+import { useAuth } from './AuthContext';
+
+function DashboardComponent() {
+  const { user, logout } = useAuth();
+
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <p>Bienvenido, {user?.username}</p>
+      <button onClick={logout}>Cerrar Sesión</button>
+      {/* Aquí puedes agregar la tabla de usuarios y las opciones para editar o crear usuarios */}
+    </div>
+  );
+}
+
+export default DashboardComponent;
+```
+
+Con estos pasos, has creado una aplicación web con React que utiliza `useContext` para gestionar la información del usuario y el JWT después de iniciar sesión. La aplicación también maneja rutas y redirige a un panel de control ("dashboard") cuando el usuario está autenticado. Puedes personalizar la lógica de autenticación y la interfaz de usuario según tus necesidades específicas.
+
+### Componente para Mostrar la Lista de Usuarios:
+
+```jsx
+// UserList.js
+import React from 'react';
+import { Table, Button } from 'antd';
+
+const UserList = ({ users, onDelete, onEdit }) => {
+  const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Nombre',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Correo Electrónico',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Acciones',
+      key: 'actions',
+      render: (text, record) => (
+        <span>
+          <Button onClick={() => onEdit(record)}>Editar</Button>
+          <Button onClick={() => onDelete(record.id)} style={{ marginLeft: '8px' }} type="danger">
+            Eliminar
+          </Button>
+        </span>
+      ),
+    },
+  ];
+
+  return <Table dataSource={users} columns={columns} />;
+};
+
+export default UserList;
+```
+
+### Componente para el Formulario de Registro / Edición de Usuarios:
+
+```jsx
+// UserForm.js
+import React, { useState, useEffect } from 'react';
+import { Form, Input, Button } from 'antd';
+
+const UserForm = ({ user, onSave, onCancel }) => {
+  const [form] = Form.useForm();
+  const [isNewUser, setIsNewUser] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      form.setFieldsValue(user);
+      setIsNewUser(false);
+    } else {
+      form.resetFields();
+      setIsNewUser(true);
+    }
+  }, [user, form]);
+
+  const onFinish = (values) => {
+    onSave(values);
+  };
+
+  return (
+    <Form form={form} onFinish={onFinish} layout="vertical">
+      <Form.Item
+        name="name"
+        label="Nombre"
+        rules={[{ required: true, message: 'Por favor, ingrese el nombre' }]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name="email"
+        label="Correo Electrónico"
+        rules={[
+          { required: true, message: 'Por favor, ingrese el correo electrónico' },
+          { type: 'email', message: 'El correo electrónico no es válido' },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          {isNewUser ? 'Registrar Usuario' : 'Actualizar Usuario'}
+        </Button>
+        <Button onClick={onCancel} style={{ marginLeft: '8px' }}>
+          Cancelar
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default UserForm;
+```
+
+Estos componentes te permitirán mostrar la lista de usuarios y crear o editar usuarios. `UserList` muestra una tabla con la lista de usuarios y botones para editar y eliminar. `UserForm` es un formulario que permite registrar o editar un usuario. Puedes integrar estos componentes en tu aplicación y gestionar los datos de los usuarios según tus necesidades.

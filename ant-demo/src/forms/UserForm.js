@@ -1,25 +1,24 @@
 import { Form, Input, Select } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-export default function UserForm({ user }) {
-  const [form] = Form.useForm();
-  const [edit, setEdit] = useState(false);
-
+export default function UserForm({ user, form, saveUser }) {
   useEffect(() => {
+    form.resetFields();
     if (user) {
       form.setFieldsValue(user);
-      setEdit(true);
-    } else {
-      form.resetFields();
-      setEdit(false);
     }
   }, [user, form]);
+
+  const onFinish = (values) => {
+    saveUser(values);
+  }
 
   return (
     <Form
       form={form}
       labelCol={{ span: 10 }}
       wrapperCol={{ span: 14 }}
+      onFinish={onFinish}
     >
       <Form.Item
         name="username"
@@ -53,6 +52,18 @@ export default function UserForm({ user }) {
         }]}
       >
         <Input />
+      </Form.Item>
+      <Form.Item
+        name="password"
+        label="Contraseña"
+      >
+        <Input.Password />
+      </Form.Item>
+      <Form.Item
+        name="rpassword"
+        label="Repetir contraseña"
+      >
+        <Input.Password />
       </Form.Item>
       <Form.Item
         name="status"

@@ -11,19 +11,22 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [authenticated, setAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
 
-  const login = () => {
-    setAuthenticated(true);
+  const login = ({ accessToken, user }) => {
+    setUser(user);
+    setToken(accessToken);
   }
 
   const logout = () => {
-    setAuthenticated(false);
+    setUser(null);
+    setToken(null);
   }
 
   return (
     <AuthContext.Provider
-      value={{ authenticated, login, logout }}
+      value={{ user, token, login, logout }}
     >
       {children}
     </AuthContext.Provider>

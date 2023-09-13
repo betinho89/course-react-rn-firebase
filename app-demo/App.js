@@ -25,12 +25,8 @@ export default function App() {
 
   return (
     <Wrapper>
-      <Header />
+      <Header title="Componentes Base" />
       <View style={styles.container}>
-        <Text style={{
-          fontFamily: Fonts.family.bold,
-          fontSize: Fonts.size.large
-        }}>Componentes Base</Text>
         <Text>Sin etiqueta</Text>
         <FormItem />
         <Text>Con etiqueta</Text>
@@ -43,9 +39,10 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
+    backgroundColor: '#fff',
+    flex: 1,
     justifyContent: 'center',
+    paddingHorizontal: 40,
   },
 });

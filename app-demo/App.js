@@ -9,6 +9,8 @@ import {
 
 import Fonts from './constants/Fonts';
 import FormItem from './components/controls/FormItem';
+import Wrapper from './components/layout/Wrapper';
+import Header from './components/layout/Header';
 
 export default function App() {
   const [fontLoaded, fontError] = useFonts({
@@ -22,17 +24,20 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={{
-        fontFamily: Fonts.family.bold,
-        fontSize: Fonts.size.large
-      }}>Componentes Base</Text>
-      <Text>Sin etiqueta</Text>
-      <FormItem />
-      <Text>Con etiqueta</Text>
-      <FormItem label={"Correo electrónico"} />
-      <StatusBar style="auto" />
-    </View>
+    <Wrapper>
+      <Header />
+      <View style={styles.container}>
+        <Text style={{
+          fontFamily: Fonts.family.bold,
+          fontSize: Fonts.size.large
+        }}>Componentes Base</Text>
+        <Text>Sin etiqueta</Text>
+        <FormItem />
+        <Text>Con etiqueta</Text>
+        <FormItem label={"Correo electrónico"} />
+        <StatusBar style="auto" />
+      </View>
+    </Wrapper>
   );
 }
 

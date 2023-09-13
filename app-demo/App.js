@@ -8,6 +8,7 @@ import {
 } from '@expo-google-fonts/montserrat';
 
 import Fonts from './constants/Fonts';
+import FormItem from './components/controls/FormItem';
 
 export default function App() {
   const [fontLoaded, fontError] = useFonts({
@@ -25,7 +26,11 @@ export default function App() {
       <Text style={{
         fontFamily: Fonts.family.bold,
         fontSize: Fonts.size.large
-      }}>Open 111 up App.js to start working on your app!</Text>
+      }}>Componentes Base</Text>
+      <Text>Sin etiqueta</Text>
+      <FormItem />
+      <Text>Con etiqueta</Text>
+      <FormItem label={"Correo electrónico"} />
       <StatusBar style="auto" />
     </View>
   );

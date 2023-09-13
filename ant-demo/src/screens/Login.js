@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { Card, Form, Input, Button } from 'antd';
-import { redirect } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import '../App.css';
 import { useAuth } from '../utils/context'
 import { API_URL } from '../constants';
-import Users from './Users';
 
 function Login() {
-  const { token, login, logout } = useAuth();
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
+
+  const from = location.state?.from?.pathname || "/";
 
   const onSubmit = async (values) => {
     setLoading(true);
@@ -26,15 +29,12 @@ function Login() {
     }).then(response => response.json());
     login(response);
     setLoading(false);
-  };
-
-  const handleLogout = () => {
-    logout();
+    navigate(from, { replace: true });
   };
 
   return (
     <div className="App">
-      {!token ? <Card style={{ maxWidth: 600 }}>
+      <Card style={{ maxWidth: 600 }}>
         <Form
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
@@ -71,7 +71,6 @@ function Login() {
           </Form.Item>
         </Form>
       </Card>
-    : <Users />}
     </div>
   );
 }

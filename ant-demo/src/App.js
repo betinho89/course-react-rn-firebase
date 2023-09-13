@@ -1,28 +1,44 @@
-import { Layout } from 'antd';
-import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import { Route, Routes, useLocation, Navigate, BrowserRouter } from 'react-router-dom';
 
 import './App.css';
-import { AuthProvider } from './utils/context';
+import { AuthProvider, useAuth } from './utils/context';
+import Wrapper from './components/Wrapper';
 import Login from './screens/Login';
 import Users from './screens/Users';
-
-const { Content } = Layout;
+import Home from './screens/Home';
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <Layout style={{ minHeight: '100vh' }}>
-          <Content style={{ padding: '50px' }}>
-            <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/users" element={<Users />} />
-            </Routes>
-          </Content>
-        </Layout>
-      </AuthProvider>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Wrapper />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/users"
+              element={
+                <RequireAuth>
+                  <Users />
+                </RequireAuth>
+              }
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
+}
+
+function RequireAuth({ children }) {
+  const auth = useAuth();
+  const location = useLocation();
+
+  if (!auth.token) {
+    return <Navigate to="/login" state={{ from: location }} replace />
+  }
+
+  return children;
 }
 
 export default App;

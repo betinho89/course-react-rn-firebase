@@ -668,3 +668,556 @@ Algunos de los propósitos comunes del componente `Modal` en React Native incluy
 4. **Personalización de contenido**: Puedes personalizar completamente el contenido del modal, incluyendo texto, botones, imágenes y otros elementos de la interfaz de usuario.
 
 En resumen, el componente `Modal` en React Native es una herramienta versátil para crear ventanas emergentes en la interfaz de usuario de una aplicación móvil. Puedes utilizarlo para una variedad de propósitos, desde mostrar detalles adicionales hasta recopilar datos del usuario o presentar notificaciones importantes. Los modales son una forma efectiva de mejorar la usabilidad y la experiencia del usuario en tu aplicación.
+
+## Navigation
+
+`react-navigation` es una biblioteca de navegación popular en React Native que te permite gestionar la navegación entre las distintas pantallas y componentes de tu aplicación móvil de manera eficiente y organizada. Esta biblioteca proporciona un conjunto de componentes y herramientas que facilitan la implementación de la navegación en tu aplicación.
+
+**Uso básico:**
+
+Para comenzar a utilizar `react-navigation`, primero debes instalarlo en tu proyecto:
+
+```bash
+npm install @react-navigation/native @react-navigation/stack
+```
+
+A continuación, puedes crear una estructura de navegación básica en tu aplicación. Aquí hay un ejemplo de uso con la navegación por stack:
+
+```jsx
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import MainScreen from './MainScreen';
+import Detalles from './Detalles';
+
+const Stack = createStackNavigator();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Principal">
+        <Stack.Screen name="Principal" component={MainScreen} />
+        <Stack.Screen name="Detalles" component={Detalles} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
+```
+
+En este ejemplo, se importan `NavigationContainer` y `createStackNavigator` de `@react-navigation/native` y `@react-navigation/stack`, respectivamente. Luego, se define una estructura de navegación utilizando un `Stack.Navigator` que contiene dos pantallas: "Principal" y "Detalles". Cada pantalla se asocia a un componente de React.
+
+Para navegar de una pantalla a otra, puedes utilizar el prop `navigation` que se pasa automáticamente a los componentes de pantalla. Por ejemplo, puedes usar `navigation.navigate('NombrePantalla')` para ir a otra pantalla.
+
+**Tipos de navegación:**
+
+`react-navigation` admite varios tipos de navegación, incluyendo:
+
+1. **Navegación por stack**: Ideal para la navegación basada en pilas de pantallas, como en aplicaciones de flujo lineal.
+
+2. **Navegación por pestañas (bottom tabs)**: Utilizada para aplicaciones con múltiplas secciones o vistas principales accesibles desde la parte inferior de la pantalla.
+
+3. **Navegación por cajón (drawer navigation)**: Similar a la navegación por pestañas, pero con un cajón lateral que contiene opciones de navegación.
+
+4. **Navegación por pila en modal**: Para mostrar pantallas como modales apilables en la parte superior de la pantalla actual.
+
+`react-navigation` también ofrece una variedad de características adicionales, como la personalización de encabezados, la gestión de parámetros de navegación y la navegación anidada.
+
+En resumen, `react-navigation` es una biblioteca esencial en React Native para gestionar la navegación entre pantallas y componentes de una aplicación móvil. Proporciona un conjunto de componentes y herramientas que facilitan la implementación de la navegación, mejorando la organización y la usabilidad de tu aplicación.
+
+### Drawer
+
+```jsx
+import React from 'react';
+import { Button } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+import MainScreen from './MainScreen';
+import DrawerContent from './DrawerContent';
+
+const Drawer = createDrawerNavigator();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator initialRouteName="Principal" drawerContent={(props) => <DrawerContent {...props} />}>
+        <Drawer.Screen name="Principal" component={MainScreen} />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
+```
+
+3. Crea un componente personalizado para el contenido del Drawer. En este ejemplo, lo llamaremos `DrawerContent.js`. Este componente puede contener elementos como elementos de menú y opciones de navegación.
+
+```jsx
+import React from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
+
+const DrawerContent = ({ navigation }) => {
+  const abrirPantalla = (pantalla) => {
+    navigation.navigate(pantalla);
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text>Menú</Text>
+      <Button title="Ir a la Pantalla 1" onPress={() => abrirPantalla('Pantalla1')} />
+      <Button title="Ir a la Pantalla 2" onPress={() => abrirPantalla('Pantalla2')} />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+export default DrawerContent;
+```
+
+4. En la pantalla principal (`MainScreen.js`), puedes agregar un botón para abrir el Drawer. Por ejemplo:
+
+```jsx
+import React from 'react';
+import { View, Button } from 'react-native';
+
+const MainScreen = ({ navigation }) => {
+  const abrirDrawer = () => {
+    navigation.openDrawer(); // Abre el Drawer
+  };
+
+  return (
+    <View>
+      <Button title="Abrir Drawer" onPress={abrirDrawer} />
+    </View>
+  );
+};
+
+export default MainScreen;
+```
+
+5. Ahora, cuando el usuario presione el botón "Abrir Drawer" en `MainScreen`, el Drawer se abrirá y mostrará las opciones de menú definidas en `DrawerContent`.
+
+Con estos pasos, habrás implementado un Drawer en tu aplicación React Native y podrás abrirlo cuando el usuario presione un botón en la pantalla principal. Asegúrate de adaptar los nombres de las pantallas y las opciones de menú según las necesidades de tu aplicación.
+
+## Animations
+
+Las animaciones en React Native son una forma efectiva de crear transiciones y efectos visuales suaves en la interfaz de usuario de tu aplicación móvil. Las animaciones pueden mejorar la experiencia del usuario al proporcionar interacciones atractivas y fluidas. En React Native, puedes realizar animaciones utilizando la API `Animated`, que está integrada en el framework.
+
+**Uso básico:**
+
+Aquí hay un ejemplo de cómo utilizar animaciones en React Native para animar la escala de un componente:
+
+```jsx
+import React, { useState, useRef } from 'react';
+import { View, Text, Animated, TouchableOpacity, StyleSheet } from 'react-native';
+
+const BasicAnimation = () => {
+  const [escala] = useState(new Animated.Value(1));
+
+  const initAnimation = () => {
+    Animated.timing(escala, {
+      toValue: 2,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  return (
+    <View style={styles.container}>
+      <Animated.View style={{ transform: [{ scale: escala }] }}>
+        <Text style={styles.text}>¡Animación de Escala!</Text>
+      </Animated.View>
+      <TouchableOpacity onPress={initAnimation}>
+        <Text style={styles.button}>Iniciar Animación</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 24,
+  },
+  button: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: 'blue',
+    color: 'white',
+    fontSize: 16,
+  },
+});
+
+export default BasicAnimation;
+
+```
+
+En este ejemplo, se utiliza `Animated.timing` para crear una animación de escala que hace que el componente de texto crezca en tamaño cuando el usuario toca el botón "Iniciar Animación". La propiedad `useNativeDriver` se establece en `true` para mejorar el rendimiento.
+
+Esta es solo una animación básica, y `Animated` proporciona muchas más opciones y métodos para realizar animaciones más complejas, como interpolación, secuenciación y encadenamiento de animaciones, animaciones de resorte, rotaciones, opacidad, etc.
+
+Las animaciones en React Native son una forma poderosa de mejorar la experiencia del usuario y dar vida a tus interfaces de usuario. La API `Animated` te brinda un control total sobre cómo crear y gestionar animaciones de manera eficiente. Puedes personalizar y ajustar las animaciones según las necesidades específicas de tu aplicación.
+
+## Uso de Contexto Global
+
+Para implementar un inicio de sesión utilizando Context API y reducers en React Native, y asegurarte de que la navegación solo esté disponible cuando el usuario esté logueado, puedes seguir estos pasos:
+
+1. **Configura el contexto para el inicio de sesión:**
+
+   Crea un nuevo contexto para gestionar el estado del inicio de sesión y la autenticación. Por ejemplo, en un archivo llamado `AuthContext.js`:
+
+   ```jsx
+   import { createContext, useContext, useReducer } from 'react';
+
+   const AuthContext = createContext();
+
+   export const useAuth = () => {
+     return useContext(AuthContext);
+   };
+
+   export default AuthContext;
+   ```
+
+2. **Definir el reducer y el estado inicial:**
+
+En el mismo archivo `AuthContext.js`, define el reducer y el estado inicial para gestionar el inicio de sesión y la autenticación:
+
+```jsx
+// AuthContext.js
+
+const initialState = {
+  isLoggedIn: false,
+  user: null,
+};
+
+const authReducer = (state, action) => {
+  switch (action.type) {
+    case 'LOGIN':
+      return {
+        ...state,
+        isLoggedIn: true,
+        user: action.payload,
+      };
+    case 'LOGOUT':
+      return {
+        ...state,
+        isLoggedIn: false,
+        user: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export { initialState, authReducer };
+```
+
+3. **Crear el componente `AuthProvider`:**
+
+En tu componente principal, que generalmente se encuentra en `App.js`, crea el proveedor de contexto para el inicio de sesión y envuelve tu aplicación con él:
+
+```jsx
+// App.js
+
+import React, { useReducer } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+
+import AuthContext, { initialState, authReducer } from './AuthContext';
+import MainNavigation from './MainNavigation'; // Define tu componente de navegación
+
+const App = () => {
+  const [authState, dispatch] = useReducer(authReducer, initialState);
+
+  return (
+    <AuthContext.Provider value={{ authState, dispatch }}>
+      <NavigationContainer>
+        <MainNavigation />
+      </NavigationContainer>
+    </AuthContext.Provider>
+  );
+};
+
+export default App;
+```
+
+4. **Implementar el inicio de sesión y logout:**
+
+En cualquier componente de tu aplicación, puedes utilizar el contexto `AuthContext` y el dispatch proporcionado para implementar el inicio de sesión y el logout:
+
+```jsx
+import React from 'react';
+import { View, Text, Button } from 'react-native';
+import { useAuth } from './AuthContext';
+
+const LoginScreen = () => {
+  const { authState, dispatch } = useAuth();
+
+  const handleLogin = () => {
+    // Aquí puedes realizar la lógica de inicio de sesión
+    // Por ejemplo, llamar a una API, verificar credenciales, etc.
+    // Si el inicio de sesión es exitoso, dispatch LOGIN con el usuario
+    const user = { id: 1, nombre: 'Usuario Ejemplo' };
+    dispatch({ type: 'LOGIN', payload: user });
+  };
+
+  const handleLogout = () => {
+    // Implementa la lógica de logout, si es necesario
+    dispatch({ type: 'LOGOUT' });
+  };
+
+  return (
+    <View>
+      {authState.isLoggedIn ? (
+        <>
+          <Text>Bienvenido, {authState.user.nombre}</Text>
+          <Button title="Cerrar Sesión" onPress={handleLogout} />
+        </>
+      ) : (
+        <Button title="Iniciar Sesión" onPress={handleLogin} />
+      )}
+    </View>
+  );
+};
+
+export default LoginScreen;
+```
+
+5. **Configurar la navegación condicional:**
+
+En tu componente de navegación (`MainNavigation` en este caso), utiliza el estado global `authState` para decidir qué pantallas deben estar disponibles para el usuario. Por ejemplo:
+
+```jsx
+// MainNavigation.js
+
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { useAuth } from './AuthContext';
+
+import LoginScreen from './LoginScreen';
+import MainScreen from './MainScreen'; // Define tus pantallas
+
+const Stack = createStackNavigator();
+
+const MainNavigation = () => {
+  const { authState } = useAuth();
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        {authState.isLoggedIn ? (
+          <Stack.Screen name="MainScreen" component={MainScreen} />
+        ) : (
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default MainNavigation;
+```
+
+Con estos pasos, has implementado el inicio de sesión con Context API y reducers en React Native y has configurado una navegación condicional que permite el acceso a ciertas pantallas solo cuando el usuario esté logueado. A medida que el usuario inicia sesión o cierra sesión, el estado global se actualiza y la navegación se ajusta en consecuencia.
+
+## Notificaciones
+
+### Mandar notificaciones Locales
+
+Las notificaciones en una aplicación React Native se pueden implementar utilizando el módulo de notificaciones de Expo. Expo proporciona una API simple y efectiva para manejar notificaciones push y locales en aplicaciones React Native. Aquí tienes una breve definición y ejemplos de cómo usar las notificaciones de Expo en una aplicación React Native:
+
+1. **Configuración de Expo Push Notifications:**
+
+Para habilitar las notificaciones push, primero debes configurar Expo para que funcione con notificaciones push. Esto implica registrar tu aplicación en Expo y obtener un token de notificación.
+
+- Registrarse en Expo y crear un proyecto si aún no lo has hecho en [Expo](https://expo.dev/).
+- Configurar el entorno de notificaciones push siguiendo la documentación de Expo.
+
+2. **Instalación de dependencias:**
+
+Asegúrate de tener las siguientes dependencias instaladas en tu proyecto React Native:
+
+```bash
+npm install expo-notifications
+```
+
+3. **Solicitud de permisos de notificación:**
+
+Debes solicitar permisos de notificación al usuario antes de poder enviar notificaciones. Puedes hacerlo utilizando el módulo `Notifications` de Expo. Aquí hay un ejemplo:
+
+```jsx
+import { useEffect } from 'react';
+import * as Notifications from 'expo-notifications';
+
+useEffect(() => {
+  // Solicitar permisos de notificación al montar el componente
+  (async () => {
+    const { status } = await Notifications.requestPermissionsAsync();
+    if (status !== 'granted') {
+      console.error('Permiso de notificación no concedido');
+      return;
+    }
+  })();
+
+  // Manejar notificaciones cuando lleguen
+  Notifications.addNotificationReceivedListener(handleNotification);
+}, []);
+
+const handleNotification = (notification) => {
+  // Manejar la notificación recibida aquí
+  console.log('Notificación recibida:', notification);
+};
+```
+
+4. **Enviar notificaciones push:**
+
+Para enviar notificaciones push a tu aplicación, debes utilizar el token de notificación que obtuviste durante la configuración de Expo y enviarlo a un servidor de notificaciones. Luego, ese servidor enviará notificaciones push a tu aplicación cuando sea necesario.
+
+5. **Enviar notificaciones locales:**
+
+   Puedes programar y mostrar notificaciones locales sin necesidad de un servidor externo. Utiliza el módulo `Notifications` de Expo para crear y programar notificaciones locales.
+
+```jsx
+import { useEffect } from 'react';
+import * as Notifications from 'expo-notifications';
+
+useEffect(() => {
+  const scheduleNotification = async () => {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: 'Recordatorio',
+        body: 'No olvides hacer algo importante.',
+      },
+      trigger: {
+        seconds: 3600, // Mostrar la notificación en 1 hora
+      },
+    });
+  };
+
+  scheduleNotification();
+}, []);
+```
+
+Estos son los pasos básicos para usar notificaciones en una aplicación React Native con Expo. Ten en cuenta que las notificaciones push pueden ser más complejas, ya que involucran un servidor externo para enviar las notificaciones. La implementación exacta dependerá de tus requisitos específicos y del backend de tu aplicación. Asegúrate de consultar la documentación de Expo para obtener más detalles sobre el uso de notificaciones en tu proyecto específico.
+
+### Mandar notificaciones usando el servicio de Expo
+
+1. Instalamos las siguientes librerías
+
+`npx expo install expo-notifications expo-device expo-constants`
+
+2. Implementamos el siguiente código.
+
+```jsx
+import { useState, useEffect, useRef } from 'react';
+import { Text, View, Button, Platform } from 'react-native';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import Constants from "expo-constants";
+
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = await Notifications.getExpoPushTokenAsync({
+      projectId: Constants.expoConfig.extra.eas.projectId,
+    });
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  return token;
+}
+
+export default function App() {
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
+      <Text>Your expo push token: {expoPushToken}</Text>
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Title: {notification && notification.request.content.title} </Text>
+        <Text>Body: {notification && notification.request.content.body}</Text>
+        <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
+      </View>
+    </View>
+  );
+}
+```
+
+Usando el ejemplo anterior, cuando se está registrando para las notificaciones push, es necesario utilizar `projectId`. Esta propiedad se utiliza para atribuir Expo push token al proyecto específico. Para los proyectos que utilizan EAS, la propiedad `projectId` representa el Identificador Único Universal (UUID) de ese proyecto.
+
+`projectId` se establece automáticamente al crear una compilación de desarrollo. Sin embargo, recomendamos establecerlo manualmente en el código del proyecto. Para ello, puede utilizar `expo-constants` para obtener el valor `projectId` de la configuración de la aplicación.
+
+```javascript
+token = await Notifications.getExpoPushTokenAsync({
+  projectId: Constants.expoConfig.extra.eas.projectId,
+});
+```
+
+Una ventaja de atribuir el token push Expo al ID de su proyecto es que no cambia cuando un proyecto se transfiere entre diferentes cuentas o se cambia el nombre de la cuenta existente.
+
+3. Probamos enviando una notificación con la herramienta que nos proporciona [Expo](https://expo.dev/notifications).

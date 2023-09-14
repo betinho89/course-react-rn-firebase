@@ -1089,6 +1089,60 @@ const memoizedComponent = useMemo(() => <Componente />, []);
 
 En resumen, useMemo es una herramienta poderosa para optimizar el rendimiento de componentes funcionales en React al memorizar valores calculados. Debes utilizarlo en situaciones donde los cálculos sean costosos y no necesites recalcularlos en cada renderizado. Sin embargo, ten en cuenta que su uso excesivo puede aumentar la complejidad de tu código, por lo que debes aplicarlo con prudencia.
 
+### 6. useReducer
+
+El hook `useReducer` en React es una función que se utiliza para gestionar el estado de un componente mediante la aplicación de un patrón de diseño llamado "Reducer". Este hook es especialmente útil cuando el estado del componente es más complejo o necesita lógica más avanzada para ser actualizado. Funciona de manera similar a `useState`, pero en lugar de manejar un solo valor de estado, `useReducer` maneja un estado que puede ser un objeto o una estructura de datos más compleja.
+
+La sintaxis básica de `useReducer` es la siguiente:
+
+```javascript
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+
+- `state` es el estado actual.
+- `dispatch` es una función que se utiliza para enviar acciones (objetos que describen qué cambio debe realizarse en el estado).
+- `reducer` es una función pura que especifica cómo debe actualizarse el estado en respuesta a las acciones.
+- `initialState` es el estado inicial del componente.
+
+Aquí hay un ejemplo simple de cómo usar `useReducer` en un componente de React:
+
+```javascript
+import React, { useReducer } from 'react';
+
+// Define el reducer
+const counterReducer = (state, action) => {
+  switch (action.type) {
+    case 'INCREMENT':
+      return { count: state.count + 1 };
+    case 'DECREMENT':
+      return { count: state.count - 1 };
+    default:
+      return state;
+  }
+};
+
+function Counter() {
+  // Utiliza useReducer con el reducer y el estado inicial
+  const [state, dispatch] = useReducer(counterReducer, { count: 0 });
+
+  return (
+    <div>
+      <p>Count: {state.count}</p>
+      <button onClick={() => dispatch({ type: 'INCREMENT' })}>Increment</button>
+      <button onClick={() => dispatch({ type: 'DECREMENT' })}>Decrement</button>
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+En este ejemplo, hemos creado un contador simple que utiliza `useReducer`. El reducer `counterReducer` toma el estado actual y una acción, y devuelve un nuevo estado basado en la acción. Luego, en el componente `Counter`, usamos `useReducer` para inicializar el estado del contador y obtener la función `dispatch` para enviar acciones que actualizan el estado.
+
+Cuando hacemos clic en los botones "Increment" y "Decrement", enviamos acciones al reducer, que luego actualiza el estado y provoca una re-renderización del componente con el nuevo valor del contador.
+
+En resumen, `useReducer` es útil cuando se necesita gestionar un estado más complejo en un componente y cuando las actualizaciones del estado implican lógica más avanzada que la proporcionada por `useState`.
+
 ## Patrones de Diseño
 
 A continuación listo los diferentes tipos de patrones de diseño que se suelen usar al momento de desarrollar una aplicación con React, esto también aplica para React Native, son reglas que se pueden seguir para tener un código mas limpio, ordenado y legible.

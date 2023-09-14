@@ -1,0 +1,31 @@
+
+
+
+// Paquetes para uso de Navegación
+
+npm install @react-navigation/native
+npm install @react-navigation/native-stack
+npm install @react-navigation/drawer
+
+
+// Corregir error
+
+npm uninstall @react-navigation/stack
+npx expo install react-native-gesture-handler react-native-reanimated
+
+// babel.config.js
+module.exports = function(api) {
+  api.cache(true);
+  return {
+    presets: ['babel-preset-expo'],
+    plugins: [
+      'react-native-reanimated/plugin'
+    ]
+  };
+};
+
+// Modificar script de "start" en "package.json"
+"start": "expo start --clear",
+
+// Agregar hasta el principio del index.js
+import 'react-native-gesture-handler';

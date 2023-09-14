@@ -7,7 +7,6 @@ import {
   Montserrat_700Bold
 } from '@expo-google-fonts/montserrat';
 
-import Fonts from './constants/Fonts';
 import FormItem from './components/controls/FormItem';
 import Wrapper from './components/layout/Wrapper';
 import Header from './components/layout/Header';

@@ -29,3 +29,5 @@ module.exports = function(api) {
 
 // Agregar hasta el principio del index.js
 import 'react-native-gesture-handler';
+
+https://we.tl/t-Zo6eWSFQ6c

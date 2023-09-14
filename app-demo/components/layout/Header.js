@@ -1,15 +1,32 @@
 import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons, EvilIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 import Colors from '../../constants/Colors';
 import Fonts from '../../constants/Fonts';
 
-export default function Header({ title }) {
+export function Header({ title, showBack = false }) {
+  const navigation = useNavigation();
+
+  const goToBack = () => {
+    navigation.goBack();
+  };
+
+  const showDrawer = () => {
+    navigation.openDrawer();
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
-        <Ionicons name="arrow-back-outline" size={40} color="black" />
-      </TouchableOpacity>
+      {showBack ? (
+        <TouchableOpacity onPress={goToBack}>
+          <Ionicons name="arrow-back-outline" size={40} color="black" />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={showDrawer}>
+          <Ionicons name="menu" size={40} color="black" />
+        </TouchableOpacity>
+      )}
       <View style={styles.logoContainer}>
         {title && <Text style={styles.title}>{title}</Text>}
         <Image style={styles.logo} source={require('../../assets/icon.png')} />

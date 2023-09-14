@@ -1,4 +1,5 @@
-import { Text, Button, View } from "react-native";
+import { Content, Header, Wrapper } from '../components/layout';
+import Button from '../components/controls/Button';
 
 export default function Login({ navigation }) {
   const goToHome = () => {
@@ -6,9 +7,11 @@ export default function Login({ navigation }) {
   };
 
   return (
-    <View>
-      <Text>Pantalla de Inicio de sesión</Text>
-      <Button title="Ir al Home" onPress={goToHome} />
-    </View>
-  )
+    <Wrapper>
+      <Header showBack={true} />
+      <Content>
+        <Button label="Ir al Home" onPress={goToHome} />
+      </Content>
+    </Wrapper>
+  );
 };

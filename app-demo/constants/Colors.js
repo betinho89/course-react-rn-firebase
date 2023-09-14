@@ -1,4 +1,5 @@
 export default {
+  black: '#000000',
   cinnabar: '#F24236',
   ghostWhite: '#F8FAFC',
   jet: '#353535',

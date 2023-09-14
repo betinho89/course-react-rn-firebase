@@ -1,15 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 import {
   useFonts,
   Montserrat_300Light,
   Montserrat_400Regular,
   Montserrat_700Bold
 } from '@expo-google-fonts/montserrat';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import FormItem from './components/controls/FormItem';
-import Wrapper from './components/layout/Wrapper';
-import Header from './components/layout/Header';
+import Navigation from './navigation';
 
 export default function App() {
   const [fontLoaded, fontError] = useFonts({
@@ -23,25 +21,9 @@ export default function App() {
   }
 
   return (
-    <Wrapper>
-      <Header title="Componentes Base" />
-      <View style={styles.container}>
-        <Text>Sin etiqueta</Text>
-        <FormItem />
-        <Text>Con etiqueta</Text>
-        <FormItem label={"Correo electrónico"} />
-        <StatusBar style="auto" />
-      </View>
-    </Wrapper>
+    <SafeAreaProvider>
+      <Navigation />
+      <StatusBar style="auto" />
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 40,
-  },
-});

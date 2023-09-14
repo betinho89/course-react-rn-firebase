@@ -10,8 +10,16 @@ const Stack = createNativeStackNavigator();
 function RootNavigation() {
   return (
     <Stack.Navigator initialRouteName='External'>
-      <Stack.Screen name='Dashboard' component={Dashboard} />
-      <Stack.Screen name='External' component={External} />
+      <Stack.Screen
+        name='Dashboard'
+        component={Dashboard}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='External'
+        component={External}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }

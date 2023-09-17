@@ -1,45 +1,49 @@
 import { useEffect, useState } from "react";
-import { Table, Row, Col, Modal, Button, Form } from 'antd';
+import { Table, Row, Col, Modal, Button, Form } from "antd";
+import { collection, getDocs, doc, setDoc } from "firebase/firestore";
 
 import { useAuth } from "../utils/context";
-import { API_URL } from '../constants';
-import UserForm from '../forms/UserForm';
+import UserForm from "../forms/UserForm";
+
+import { db } from "../firebase-config";
 
 export default function Users() {
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [form] = Form.useForm();
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   const userColumns = [
     {
-      title: 'Usuario',
-      dataIndex: 'username',
-      key: 'username'
+      title: "Id",
+      dataIndex: "key",
+      key: "key",
     },
     {
-      title: 'Nombre completo',
-      dataIndex: 'full_name',
-      key: 'full_name'
+      title: "Nombre",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      title: "Código",
+      dataIndex: "code",
+      key: "code",
     },
     {
-      title: 'Estatus',
-      dataIndex: 'status',
-      key: 'status',
-      render: status => status ? 'Activo' : 'Inactivo'
+      title: "Estatus",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => (status ? "Activo" : "Inactivo"),
     },
     {
-      title: 'Editar',
-      key: 'actions',
-      render: (text, record) =>
+      title: "Editar",
+      key: "actions",
+      render: (text, record) => (
         <Button onClick={() => handleSelectedRow(record)}>Editar</Button>
-    }
+      ),
+    },
   ];
 
   const handleSelectedRow = (record) => {
@@ -56,43 +60,34 @@ export default function Users() {
     setShowModal(!showModal);
   };
 
-  const saveUser = (values) => {
+  const saveUser = async (values) => {
     if (!selectedUser) {
-      fetch(`${API_URL}/users`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...values,
-          rol_id: '642bbd8ce754c42aeaee39d3',
-        }),
-      });
+      await setDoc(doc(collection(db, "states")), values);
     } else {
-      fetch(`${API_URL}/users/${selectedUser._id}`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...values,
-        }),
+      await setDoc(doc(db, "states", selectedUser.key), values, {
+        merge: true,
       });
     }
+    getData();
+  };
+
+  const getData = async () => {
+    setLoading(true);
+    getDocs(collection(db, "states")).then((querySnapshot) => {
+      const states = [];
+      querySnapshot.forEach((doc) => {
+        states.push({
+          ...doc.data(),
+          key: doc.id,
+        });
+      });
+      setData(states);
+      setLoading(false);
+    });
   };
 
   useEffect(() => {
-    fetch(`${API_URL}/users`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      .then(response => response.json())
-      .then(response => {
-        setData(response.data);
-      });
+    getData();
   }, []);
 
   return (
@@ -102,7 +97,9 @@ export default function Users() {
         cancelText="Cancelar"
         open={showModal}
         onCancel={toggleModal}
-        onOk={() => { form.submit(); }}
+        onOk={() => {
+          form.submit();
+        }}
       >
         <UserForm user={selectedUser} form={form} saveUser={saveUser} />
       </Modal>
@@ -118,11 +115,11 @@ export default function Users() {
           </Row>
           <Row>
             <Col>
-              <Table columns={userColumns} dataSource={data} />
+              <Table columns={userColumns} dataSource={data} loading={loading} />
             </Col>
           </Row>
         </Col>
       </Row>
     </>
-  )
+  );
 }

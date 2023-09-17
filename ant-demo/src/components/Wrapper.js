@@ -7,10 +7,12 @@ import {
 import { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { Layout, Menu, Button, theme } from 'antd';
+import { useAuth } from '../utils/context';
 
 const { Header, Sider, Content } = Layout;
 
 export default function Wrapper () {
+  const { logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const { token: { colorBgContainer } } = theme.useToken();
 
@@ -24,6 +26,9 @@ export default function Wrapper () {
           </Menu.Item>
           <Menu.Item icon={<UserOutlined />} key="users">
             <Link to={'/users'}>Usuarios</Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Button onClick={logout}>Cerrar sesión</Button>
           </Menu.Item>
         </Menu>
       </Sider>

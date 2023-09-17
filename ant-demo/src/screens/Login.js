@@ -4,7 +4,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import '../App.css';
 import { useAuth } from '../utils/context'
-import { API_URL } from '../constants';
+
+import { loginWithEmailPass, loginWithGoogle } from '../services/Firebase';
 
 function Login() {
   const { login } = useAuth();
@@ -16,21 +17,19 @@ function Login() {
 
   const onSubmit = async (values) => {
     setLoading(true);
-    const response = await fetch(`${API_URL}/authentication`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        strategy: 'local',
-        email: values.username,
-        password: values.password,
-      }),
-    }).then(response => response.json());
+    const response = await loginWithEmailPass(values.username, values.password);
     login(response);
     setLoading(false);
     navigate(from, { replace: true });
   };
+
+  const loginGoogle = async () => {
+    setLoading(true);
+    const response = await loginWithGoogle();
+    login(response);
+    setLoading(false);
+    navigate(from, { replace: true });
+  }
 
   return (
     <div className="App">
@@ -68,6 +67,9 @@ function Login() {
           </Form.Item>
           <Form.Item wrapperCol={{ span: 24 }}>
             <Button htmlType='submit' type="primary" loading={loading}>Enviar</Button>
+          </Form.Item>
+          <Form.Item wrapperCol={{ span: 24 }}>
+            <Button htmlType='button' loading={loading} onClick={loginGoogle}>Login with Google</Button>
           </Form.Item>
         </Form>
       </Card>

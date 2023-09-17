@@ -3,6 +3,7 @@ import {
   createContext,
   useState
 } from 'react';
+import { logoutAuth } from '../services/Firebase';
 
 const AuthContext = createContext();
 
@@ -12,21 +13,20 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
 
-  const login = ({ accessToken, user }) => {
-    setUser(user);
-    setToken(accessToken);
+  const login = (data) => {
+    console.log('Login data: ', data);
+    setUser(data.user);
   }
 
-  const logout = () => {
+  const logout = async () => {
+    await logoutAuth();
     setUser(null);
-    setToken(null);
   }
 
   return (
     <AuthContext.Provider
-      value={{ user, token, login, logout }}
+      value={{ user, login, logout }}
     >
       {children}
     </AuthContext.Provider>

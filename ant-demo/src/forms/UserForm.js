@@ -21,58 +21,33 @@ export default function UserForm({ user, form, saveUser }) {
       onFinish={onFinish}
     >
       <Form.Item
-        name="username"
-        label="Nombre de usuario"
+        name="name"
+        label="Nombre"
         rules={[{
           required: true,
-          message: 'Nombre de usuario requerido!'
+          message: 'Nombre del estado requerido!'
         }]}
       >
         <Input type='text' />
       </Form.Item>
       <Form.Item
-        name="full_name"
-        label="Nombre completo"
+        name="code"
+        label="Código"
         rules={[{
           required: true,
-          message: 'Nombre completo requerido!'
+          message: 'Código del estado requerido!'
         }]}
       >
         <Input type='text' />
-      </Form.Item>
-      <Form.Item
-        name="email"
-        label="Correo electrónico"
-        rules={[{
-          type: 'email',
-          message: 'Formato de correo invalido'
-        }, {
-          required: true,
-          message: 'Correo requerido!'
-        }]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name="password"
-        label="Contraseña"
-      >
-        <Input.Password />
-      </Form.Item>
-      <Form.Item
-        name="rpassword"
-        label="Repetir contraseña"
-      >
-        <Input.Password />
       </Form.Item>
       <Form.Item
         name="status"
         label="Estatus"
-        initialValue={1}
+        initialValue={true}
       >
         <Select>
-          <Select.Option value={1}>Activo</Select.Option>
-          <Select.Option value={0}>Inactivo</Select.Option>
+          <Select.Option value={true}>Activo</Select.Option>
+          <Select.Option value={false}>Inactivo</Select.Option>
         </Select>
       </Form.Item>
     </Form>

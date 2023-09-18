@@ -5,7 +5,11 @@ import { useNavigation } from '@react-navigation/native';
 import Colors from '../../constants/Colors';
 import Fonts from '../../constants/Fonts';
 
-export function Header({ title, showBack = false }) {
+export function Header({
+  title,
+  showBack = false,
+  showCart = true,
+}) {
   const navigation = useNavigation();
 
   const goToBack = () => {
@@ -31,9 +35,11 @@ export function Header({ title, showBack = false }) {
         {title && <Text style={styles.title}>{title}</Text>}
         <Image style={styles.logo} source={require('../../assets/icon.png')} />
       </View>
-      <TouchableOpacity>
-        <EvilIcons name="cart" size={40} color="black" />
-      </TouchableOpacity>
+      {showCart ? (
+        <TouchableOpacity>
+          <EvilIcons name="cart" size={40} color="black" />
+        </TouchableOpacity>
+      ) : (<View></View>)}
     </View>
   );
 }

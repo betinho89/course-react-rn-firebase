@@ -14,7 +14,7 @@ export default function FormItem ({ label }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
+    marginBottom: 30,
     width: '100%'
   },
   label: {

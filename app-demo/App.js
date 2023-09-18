@@ -22,8 +22,8 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <Navigation />
       <StatusBar style="auto" />
+      <Navigation />
     </SafeAreaProvider>
   );
 }

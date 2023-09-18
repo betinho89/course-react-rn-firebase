@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Fonts from '../../constants/Fonts';
 import Colors from '../../constants/Colors';
 
-export default function Title({ title, color }) {
+export function Title({ title, color }) {
   return (
     <View>
       <Text style={

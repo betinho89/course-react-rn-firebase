@@ -3,9 +3,12 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import Colors from "../../constants/Colors";
 import Fonts from "../../constants/Fonts";
 
-export default function Button({ label, onPress }) {
+export default function Button({ label, type = 'black', onPress }) {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={[
+      styles.container,
+      type === 'white' && styles.containerWhite
+    ]}>
       <Text style={styles.text}>{label}</Text>
     </TouchableOpacity>
   )
@@ -23,5 +26,10 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontFamily: Fonts.family.regular,
     fontSize: Fonts.size.normal,
-  }
+  },
+  containerWhite: {
+    borderColor: Colors.white,
+    borderRadius: 10,
+    borderWidth: 2,
+  },
 });

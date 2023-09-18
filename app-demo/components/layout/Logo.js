@@ -2,24 +2,21 @@ import { View, Image, Dimensions, StyleSheet } from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
 
-export default function Logo({
+export function Logo({
   type = 'black',
-  height,
   width,
 }) {
+  const image = type === 'black' ? require('../../assets/icon.png') : require('../../assets/logo-white.png');
+  const size = width || windowWidth * 0.6;
+
   return (
     <View style={styles.container}>
       <Image
         style={{
-          height,
-          maxWidth: windowWidth * 0.8,
-          width,
+          height: size,
+          width: size,
         }}
-        source={
-          require(
-            `../../assets/${type === 'black' ? 'icon.png' : 'logo-white.png'}`
-          )
-        }
+        source={image}
       />
     </View>
   );

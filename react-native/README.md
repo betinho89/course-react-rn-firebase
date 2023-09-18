@@ -1035,6 +1035,136 @@ export default MainNavigation;
 
 Con estos pasos, has implementado el inicio de sesión con Context API y reducers en React Native y has configurado una navegación condicional que permite el acceso a ciertas pantallas solo cuando el usuario esté logueado. A medida que el usuario inicia sesión o cierra sesión, el estado global se actualiza y la navegación se ajusta en consecuencia.
 
+## Estilos (StyleSheet)
+
+`StyleSheet` es un módulo en React Native que se utiliza para crear y gestionar estilos en aplicaciones móviles. Permite definir estilos de manera eficiente y optimizada para diferentes componentes y elementos de la interfaz de usuario en aplicaciones para dispositivos móviles.
+
+**Implementación:**
+Para utilizar `StyleSheet` en React Native, primero debes importarlo de la siguiente manera:
+
+```javascript
+import { StyleSheet } from 'react-native';
+```
+
+Luego, puedes definir estilos utilizando el método `create` de `StyleSheet`. Por ejemplo:
+
+```javascript
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'lightblue',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  texto: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+});
+```
+
+En este ejemplo, hemos creado un objeto de estilos `styles` que contiene dos estilos, `container` y `texto`. Estos estilos se pueden aplicar a los componentes de la siguiente manera:
+
+```jsx
+import React from 'react';
+import { View, Text } from 'react-native';
+import styles from './styles'; // Importa tus estilos
+
+const MiComponente = () => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.texto}>Hola, Mundo!</Text>
+    </View>
+  );
+};
+
+export default MiComponente;
+```
+
+**Personalizaciones para diferentes sistemas operativos:**
+Puedes personalizar estilos para diferentes sistemas operativos (iOS y Android) utilizando la plataforma condicional `Platform` proporcionada por React Native. Esto te permite adaptar los estilos según las convenciones de diseño de cada plataforma. Por ejemplo:
+
+```jsx
+import { StyleSheet, Platform } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Platform.OS === 'ios' ? 'lightblue' : 'lightgreen',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  texto: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Platform.OS === 'ios' ? 'black' : 'white',
+  },
+});
+```
+
+En este ejemplo, el color de fondo y el color del texto se personalizan según la plataforma en la que se ejecute la aplicación.
+
+En resumen, `StyleSheet` en React Native es una herramienta esencial para definir y gestionar estilos en aplicaciones móviles. Permite una organización eficiente de los estilos y facilita la personalización para diferentes sistemas operativos a través de la plataforma condicional `Platform`. Esto ayuda a crear aplicaciones móviles con una apariencia y sensación nativa en iOS y Android.
+
+### Flex Box
+
+Flexbox es un modelo de diseño en React Native que facilita la organización y alineación de elementos en una interfaz de usuario. Permite que los elementos se ajusten automáticamente al espacio disponible en la pantalla, lo que hace que sea más fácil crear diseños responsivos y adaptables en aplicaciones móviles.
+
+1. **Crear un componente:**
+
+   Primero, crea un componente de React Native. Puedes utilizar el siguiente ejemplo como punto de partida:
+
+   ```jsx
+   import React from 'react';
+   import { View, Text, StyleSheet } from 'react-native';
+
+   const MiComponente = () => {
+     return (
+       <View style={styles.container}>
+         <Text style={styles.texto}>Elemento 1</Text>
+         <Text style={styles.texto}>Elemento 2</Text>
+         <Text style={styles.texto}>Elemento 3</Text>
+       </View>
+     );
+   };
+
+   const styles = StyleSheet.create({
+     container: {
+       flex: 1,
+       flexDirection: 'column', // Puedes cambiar a 'row' para cambiar la dirección principal
+       justifyContent: 'center', // Puedes cambiar a 'flex-start', 'flex-end', 'space-between', etc.
+       alignItems: 'center', // Puedes cambiar a 'flex-start', 'flex-end', 'stretch', etc.
+     },
+     texto: {
+       fontSize: 18,
+     },
+   });
+
+   export default MiComponente;
+   ```
+
+   En este ejemplo, hemos creado un componente que contiene tres elementos de texto en un `View`. Hemos aplicado estilos usando `StyleSheet` y hemos configurado el contenedor (`View`) para utilizar Flexbox.
+
+2. **Propiedades de Flexbox:**
+
+   - `flex`: Define la relación de tamaño entre los elementos secundarios. Puedes asignar un número entero para establecer la proporción de espacio que cada elemento ocupa.
+   - `flexDirection`: Establece la dirección principal de los elementos secundarios. Puedes usar `'column'` (predeterminado) para apilar elementos verticalmente o `'row'` para alinearlos horizontalmente.
+   - `justifyContent`: Define cómo se distribuyen los elementos secundarios en la dirección principal. Puedes usar `'center'`, `'flex-start'`, `'flex-end'`, `'space-between'`, `'space-around'`, etc.
+   - `alignItems`: Controla la alineación de los elementos secundarios en la dirección transversal. Puedes usar `'center'`, `'flex-start'`, `'flex-end'`, `'stretch'`, etc.
+
+**Uso de Flexbox en React Native:**
+
+- Puedes agregar más elementos secundarios dentro del `View` y Flexbox ajustará automáticamente su disposición y tamaño según las propiedades configuradas.
+- Experimenta con diferentes valores para `flexDirection`, `justifyContent` y `alignItems` para lograr el diseño deseado.
+- Utiliza las propiedades `flex`, `flexGrow`, y `flexShrink` para ajustar el comportamiento de expansión y contracción de los elementos secundarios.
+- Flexbox es útil para crear diseños adaptables y sensibles al tamaño de la pantalla, lo que lo hace ideal para aplicaciones móviles.
+- Combina Flexbox con otros estilos y propiedades para personalizar aún más la apariencia y el diseño de tu aplicación React Native.
+
+Este es solo un ejemplo básico de cómo utilizar Flexbox en React Native. Flexbox es una herramienta poderosa y versátil para crear diseños complejos y adaptables en tus aplicaciones móviles. Puedes personalizar y ajustar los estilos y propiedades de Flexbox según las necesidades de tu proyecto.
+
+Para ver a detalle el comportamiento de Flex Box ver el siguiente [enlace](https://reactnative.dev/docs/flexbox).
+
 ## Notificaciones
 
 ### Mandar notificaciones Locales
@@ -1221,3 +1351,57 @@ token = await Notifications.getExpoPushTokenAsync({
 Una ventaja de atribuir el token push Expo al ID de su proyecto es que no cambia cuando un proyecto se transfiere entre diferentes cuentas o se cambia el nombre de la cuenta existente.
 
 3. Probamos enviando una notificación con la herramienta que nos proporciona [Expo](https://expo.dev/notifications).
+
+Paso a paso con la documentación de [Expo](https://docs.expo.dev/push-notifications/push-notifications-setup/#android)
+
+## Construir y Publicar en tiendas
+
+1. Instalar EAS.
+`npm install -g eas-cli`
+2. Instalar expo-dev-client
+`npx expo install expo-dev-client`
+3. Crear una cuenta de Expo.
+4. Iniciar sesión en la cuenta de expo.
+`eas login`
+5. Configurar el proyecto
+`eas build:configure`
+6. Construir la versión
+`eas build --platform android`
+7. Se puede ver el progreso de la construcción en la liga de tu cuenta de Expo
+https://expo.dev/accounts/[usuario]/projects/[proyecto]/builds
+8. Desde aquí se puede mandar a publicar a tu cuenta de (Google Play e iOS)[https://docs.expo.dev/deploy/submit-to-app-stores/] (Recordar que hay que tener cuentas de paga)
+
+Nota: Para ver como configurar a más detalle visitar el siguiente link (Expo build)[https://docs.expo.dev/build/setup/]
+
+También se pueden descargar los archivos directamente y continuar el proceso a mano en la tienda.
+
+La otra opción es construir los archivos locales y subirlos a mano, para ello solo se ejecuta el siguiente comando:
+`npx expo run:android`
+
+## Firebase
+
+Firebase es una plataforma de desarrollo de aplicaciones móviles y web creada por Google. Ofrece una amplia gama de herramientas y servicios que simplifican el desarrollo, la implementación y la administración de aplicaciones, lo que permite a los desarrolladores centrarse en la creación de características y la mejora de la experiencia del usuario en lugar de preocuparse por la infraestructura subyacente. A continuación, se presentan algunas de las características principales de Firebase:
+
+1. **Base de Datos en Tiempo Real:** Firebase ofrece una base de datos en tiempo real en la nube que permite a las aplicaciones sincronizar datos en tiempo real entre los usuarios y dispositivos. Esto es útil para aplicaciones que requieren actualizaciones en tiempo real, como aplicaciones de chat o de colaboración.
+
+2. **Autenticación:** Firebase proporciona un sistema de autenticación sólido que permite a los desarrolladores agregar fácilmente la autenticación de usuarios a sus aplicaciones a través de métodos como correo electrónico/contraseña, autenticación con Google, Facebook, Twitter y más.
+
+3. **Almacenamiento en la Nube:** Ofrece un sistema de almacenamiento en la nube que permite a las aplicaciones almacenar y recuperar fácilmente archivos como imágenes, videos y documentos.
+
+4. **Hosting Web:** Firebase Hosting permite a los desarrolladores alojar sitios web estáticos y aplicaciones web directamente desde la infraestructura de Google. Esto simplifica la implementación y la administración de sitios web.
+
+5. **Funciones en la Nube:** Permite la creación de funciones en la nube sin servidor que se ejecutan en respuesta a eventos específicos. Esto facilita la ejecución de código en la nube sin preocuparse por la infraestructura subyacente.
+
+6. **Notificaciones en Tiempo Real:** Firebase Cloud Messaging (FCM) proporciona una plataforma para enviar notificaciones push a dispositivos móviles y navegadores web, lo que es esencial para la retención de usuarios y la participación.
+
+7. **Analytics:** Firebase Analytics ofrece información detallada sobre el comportamiento de los usuarios en la aplicación, lo que ayuda a los desarrolladores a tomar decisiones informadas sobre mejoras y optimizaciones.
+
+8. **Pruebas A/B y Experimentos:** Permite realizar pruebas A/B y experimentos en la aplicación para probar diferentes versiones y características, lo que ayuda a mejorar la retención y la conversión de usuarios.
+
+9. **Seguridad:** Firebase incluye medidas de seguridad integradas, como reglas de seguridad para la base de datos en tiempo real y autenticación segura, para proteger los datos y la privacidad de los usuarios.
+
+10. **Escalabilidad:** Firebase es escalable y puede adaptarse a las necesidades de aplicaciones pequeñas y grandes, lo que significa que los desarrolladores pueden comenzar con una aplicación simple y expandirla a medida que crece.
+
+11. **Compatibilidad multiplataforma:** Firebase es compatible con aplicaciones móviles (Android e iOS), aplicaciones web y aplicaciones de escritorio, lo que facilita el desarrollo de aplicaciones para múltiples plataformas.
+
+En resumen, Firebase es una plataforma integral que ofrece una amplia gama de herramientas y servicios para simplificar el desarrollo y la gestión de aplicaciones, lo que la hace popular entre los desarrolladores que buscan crear aplicaciones móviles y web de alta calidad de manera eficiente.

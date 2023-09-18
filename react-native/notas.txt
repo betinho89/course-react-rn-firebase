@@ -1,6 +1,3 @@
-
-
-
 // Paquetes para uso de Navegación
 
 npm install @react-navigation/native
@@ -31,3 +28,12 @@ module.exports = function(api) {
 import 'react-native-gesture-handler';
 
 https://we.tl/t-Zo6eWSFQ6c
+
+// Con clave Chango123
+https://xd.adobe.com/view/22a45f0b-2787-43a0-7e13-5a7b9242e30d-5495/
+
+
+// Implementar Firebase
+
+1. Abrir Firebase.
+2. Ir a la consola de Firebase.

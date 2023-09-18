@@ -35,6 +35,9 @@ https://xd.adobe.com/view/22a45f0b-2787-43a0-7e13-5a7b9242e30d-5495/
 // Configuración de aplicación (Incluido el splash)
 https://docs.expo.dev/versions/latest/config/app/
 
+// Iconos de Expo
+https://icons.expo.fyi/
+
 
 // Implementar Firebase
 

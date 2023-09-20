@@ -6,6 +6,7 @@ import Wrapper from './components/Wrapper';
 import Login from './screens/Login';
 import Users from './screens/Users';
 import Home from './screens/Home';
+import Register from './screens/Register';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route element={<Wrapper />}>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route
               path="/users"
               element={

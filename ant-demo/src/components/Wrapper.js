@@ -18,9 +18,12 @@ export default function Wrapper () {
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
-        <Menu theme="dark" mode="inline">
+        <Menu theme="light" mode="inline">
           <Menu.Item icon={<HomeOutlined />} key="home">
             <Link to={'/'}>Home</Link>
+          </Menu.Item>
+          <Menu.Item icon={<HomeOutlined />} key="register">
+            <Link to={'/register'}>Registrarte</Link>
           </Menu.Item>
           <Menu.Item icon={<UserOutlined />} key="users">
             <Link to={'/users'}>Usuarios</Link>

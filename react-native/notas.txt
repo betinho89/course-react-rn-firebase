@@ -41,5 +41,81 @@ https://icons.expo.fyi/
 
 // Implementar Firebase
 
-1. Abrir Firebase.
-2. Ir a la consola de Firebase.
+1. Abrir la página de Firebase
+2. Ir a la consola de Firebase
+3. Crear un proyecto (Cualquier nombre)
+4. Activar Google Analytics, para activar reportes de uso y cuando la aplicación truene
+5. Crear una aplicación Web (porque se necesita usar un scope web, para hacer uso de algunos servicios, por ejemplo el Realstore).
+6. Colocar un nombre
+7. Activa "Also setup Firebase Hosting".
+8. Dejar el nombre por default.
+9. Instalar expo en el proyecto
+`npx expo install firebase`
+10. Copiar el codigo que genera para pegarlo en un archivo que se llame `firebase-config.js` en la raiz del proyecto.
+11. Definir la autenticacion en el archivo anterior (2da 09.20)
+12. Instalar un paquete para tener persistencia de la sesion
+`npx expo install @react-native-async-storage/async-storage`
+13. Importar el paquete anterior en el archivo `firebase-config` e implementarlo (2da 11:20)
+14. Exportar nuestras constantes del archivo
+15. Ahora implementar la base de datos y exportarla (2da 13:00), mismo archivo `firebase-config`
+16. Construir el repo para Android.
+`npx expo run:android`
+  Este va a generar toda la configuracion de android, que es requerida para hacer el oAuth de google. Es para usar nativa la aplicacion porque el Auth lo necesita.
+  Compila con una version modificada de expo con los modulos nativos.
+17. Ir nuevamente a firebase.
+18. Instalar el firebase CLI
+`npm install -g firebase-tools`
+19. Darle clic en "Continue to Console".
+20. Ir al apartado de "Build" -> "Authentication"
+21. Darle "Get Started".
+22. Ahora seleccionar los servicios que vamos a ocupar para la autenticacion: Email/Password y Google.
+23. Cuando se selecciona Google, se habilitan unos inputs y opciones. En la parte del correo seleccionar nuestro email. A continuacion darle "Save".
+24. Ir nuevamente a Google y darle clic en "Editar"
+25. Ver el detalle y copiar el "Web Client ID".
+26. Ir al archivo app.json.
+27. Agrega el plugin de `google-sign`.
+28. Copiamos el nombre del paquete.
+29. Regresa a la consola de firebase.
+30. Ir a Project Overview -> Project Settings.
+31. Agregamos una nueva aplicación (2da 44:30).
+32. Seleccionar Android.
+  a. Pegar el nombre del paquete que copiamos.
+  b. Agregamos un nombre de la aplicación.
+  c. Obtener la firma digital de nuestra aplicacion, para ello ejecutamos el siguiente comando en la carpeta de android:
+    `./gradlew signingReport`
+  d. Buscar el Variant que diga "debug"
+  e. Copiar el SHA1
+  f. Pegar en la consola de firebase.
+33. Finalizamos el proceso de la creacion.
+34. Descargamos el archivo `google-service.json` que nos genero en la carpeta base de nuestro proyecto
+35. Y nos regresamos a nuestra consola de Firebase.
+36. En el app.json en la seccion de "android" agregamos la referencia a nuestro archivo que descargamos anteriormente.
+  ```json
+    {
+      "googleServicesFile": "./google-services.json"
+    }
+  ```
+37. Instalamos la liberia para conectar con el oAuth de Google.
+`npx expo install @react-native-google-signin/google-sign`
+38. Volver a correr la aplicacion con el comando de android, para que reconstruya la aplicacion.
+39. Agregar un botón para iniciar sesion con google (2da 1:05:00)
+40. Creamos una carpeta que se llame "services"
+41. Creamos un archivo que se llame "firebase.js" (2da 1:07:00).
+42. Inicializamos el GoogleSignin con el webClientId que copiamos e implementamos el codigo para generar una funcion que permita loguear con google.
+43. Mandamos a llamar la funcion que creamos en un boton de Login.
+44. Se agrega una configuracion en el metro para que acepte el JavaScript del firebase. (2da 1:14:00)
+45. Se codifica toda la funcionalidad de los botones del logout (3ra 13:00) y la pantalla de registro (3ra 23:00), para el logueo por email/password.
+46. Habilitamos la base de datos para usuarios, para ello vamos a la consola de firebase, esto se hace porque para el caso de datos extra se deben guarda en una coleccion por separado.
+  a. Seleccionamos "Build".
+  b. Seleccionamos "Firestore Database"
+  c. Damos en "Create database".
+  d. Seleccionamos "test mode".
+  e. Seleccionamos la ubicacion por default.
+  f. Creamos una coleccion que se llame "users".
+  g. Agregamos un documento de prueba (solo el full_name).
+47. Creamos una constante db en nuestro archivo de `firebase-config` y lo configuramos (3ra 41:00).
+48. Vamos a nuestro archivo de servicio de `firebase`.
+  a. Creamos una funcion para registrar el usuario. (3ra 43:00)
+49. Uso de real-time (3ra 1:19:00).
+
+Ver documentacion de firestore para el manejo de la base de datos [liga](https://firebase.google.com/docs/firestore/query-data/get-data).

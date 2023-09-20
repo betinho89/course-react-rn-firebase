@@ -3,10 +3,9 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-  getAuth
 } from "firebase/auth";
 import { message } from "antd";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 import { auth, db } from "../firebase-config";
 
@@ -41,19 +40,28 @@ export const loginWithGoogle = async () => {
   try {
     const provider = new GoogleAuthProvider();
     const context = await signInWithPopup(auth, provider);
-    console.log('Context: ', context);
     return context;
   } catch (error) {
-    console.log(error?.message);
-    message.error("Error" + JSON.stringify(error));
+    return error;
   }
 };
 
 export const loginWithEmailPass = async (email, password) => {
   try {
     const context = await signInWithEmailAndPassword(auth, email, password);
+    if (context?.user?.uid) {
+      const docSnap = await getDoc(doc(db, 'users', context.user.uid));
+      if (docSnap.exists()) {
+        const userExtData = docSnap.data();
+        context.user = {
+          ...context.user,
+          ...userExtData
+        };
+      }
+    }
     return context;
   } catch (error) {
-    message.error("Error" + JSON.stringify(error));
+    console.log(error?.message);
+    return error;
   }
 };

@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import { Table, Row, Col, Modal, Button, Form } from "antd";
-import { collection, getDocs, doc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc, onSnapshot, query, orderBy } from "firebase/firestore";
 
-import { useAuth } from "../utils/context";
 import UserForm from "../forms/UserForm";
 
 import { db } from "../firebase-config";
 
 export default function Users() {
-  const { user } = useAuth();
   const [form] = Form.useForm();
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  });
 
   const userColumns = [
     {
@@ -68,26 +69,25 @@ export default function Users() {
         merge: true,
       });
     }
-    getData();
-  };
-
-  const getData = async () => {
-    setLoading(true);
-    getDocs(collection(db, "states")).then((querySnapshot) => {
-      const states = [];
-      querySnapshot.forEach((doc) => {
-        states.push({
-          ...doc.data(),
-          key: doc.id,
-        });
-      });
-      setData(states);
-      setLoading(false);
-    });
+    toggleModal();
   };
 
   useEffect(() => {
-    getData();
+    const subscriber = onSnapshot(
+      query(collection(db, "states"), orderBy("name")),
+      querySnapshot => {
+        const states = [];
+        querySnapshot.forEach(doc => {
+          states.push({
+            ...doc.data(),
+            key: doc.id,
+          });
+        });
+        setData(states);
+      }
+    );
+
+    return subscriber;
   }, []);
 
   return (
@@ -105,17 +105,22 @@ export default function Users() {
       </Modal>
       <Row>
         <Col span={24}>
-          <Row>
+          <Row align="middle" justify="space-between">
             <Col>
-              <h1>Lista de usuarios</h1>
+              <h1>Lista de estados</h1>
             </Col>
             <Col>
               <Button onClick={handleRegisterUser}>Añadir nuevo</Button>
             </Col>
           </Row>
           <Row>
-            <Col>
-              <Table columns={userColumns} dataSource={data} loading={loading} />
+            <Col span={24}>
+              <Table
+                columns={userColumns}
+                dataSource={data}
+                pagination={pagination}
+                onChange={pagination => setPagination(pagination)}
+              />
             </Col>
           </Row>
         </Col>

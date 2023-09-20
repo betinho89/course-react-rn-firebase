@@ -3,16 +3,17 @@ import {
   MenuUnfoldOutlined,
   HomeOutlined,
   UserOutlined,
+  LoginOutlined,
 } from '@ant-design/icons';
 import { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
-import { Layout, Menu, Button, theme } from 'antd';
+import { Layout, Menu, Button, Row, Col, theme } from 'antd';
 import { useAuth } from '../utils/context';
 
 const { Header, Sider, Content } = Layout;
 
 export default function Wrapper () {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const { token: { colorBgContainer } } = theme.useToken();
 
@@ -21,15 +22,26 @@ export default function Wrapper () {
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
         <Menu theme="dark" mode="inline">
-          <Menu.Item icon={<HomeOutlined />} key="home">
-            <Link to={'/'}>Home</Link>
-          </Menu.Item>
-          <Menu.Item icon={<UserOutlined />} key="users">
-            <Link to={'/users'}>Usuarios</Link>
-          </Menu.Item>
-          <Menu.Item>
-            <Button onClick={logout}>Cerrar sesión</Button>
-          </Menu.Item>
+          {!user ? (
+            <>
+              <Menu.Item icon={<HomeOutlined />} key="home">
+                <Link to={'/'}>Inicio</Link>
+              </Menu.Item>
+              <Menu.Item icon={<LoginOutlined />} key="login">
+                <Link to={'/login'}>Iniciar Sesión</Link>
+              </Menu.Item>
+            </>
+          ) : (
+            <>
+              <Menu.Item icon={<HomeOutlined />} key="home">
+                <Link to={'/'}>Inicio</Link>
+              </Menu.Item>
+              <Menu.Item icon={<UserOutlined />} key="users">
+                <Link to={'/users'}>Estados</Link>
+              </Menu.Item>
+              <Menu.Item onClick={logout} key="logout">Cerrar sesión</Menu.Item>
+            </>
+          )}
         </Menu>
       </Sider>
       <Layout>
@@ -39,16 +51,25 @@ export default function Wrapper () {
             background: colorBgContainer,
           }}
         >
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64,
-            }}
-          />
+          <Row justify="space-between" align="middle">
+            <Col span="auto">
+              <Button
+                type="text"
+                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                  fontSize: '16px',
+                  width: 64,
+                  height: 64,
+                }}
+              />
+            </Col>
+            {user && (
+              <Col span="auto">
+                <span style={{ marginRight: 20 }}>Hola {user?.full_name || user?.displayName}</span>
+              </Col>
+            )}
+          </Row>
         </Header>
         <Content
           style={{

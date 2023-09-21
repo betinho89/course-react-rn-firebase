@@ -4,7 +4,7 @@ import './App.css';
 import { AuthProvider, useAuth } from './utils/context';
 import Wrapper from './components/Wrapper';
 import Login from './screens/Login';
-import Users from './screens/Users';
+import States from './screens/States';
 import Home from './screens/Home';
 import Register from './screens/Register';
 
@@ -18,10 +18,10 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route
-              path="/users"
+              path="/states"
               element={
                 <RequireAuth>
-                  <Users />
+                  <States />
                 </RequireAuth>
               }
             />

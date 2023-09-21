@@ -37,8 +37,8 @@ export default function Wrapper () {
             </>
           ) : (
             <>
-              <Menu.Item icon={<UserOutlined />} key="users">
-                <Link to={'/users'}>Usuarios</Link>
+              <Menu.Item key="states">
+                <Link to={'/states'}>Estados</Link>
               </Menu.Item>
               <Menu.Item onClick={logout} icon={<LogoutOutlined />} key="logout">
                 Cerrar sesión

@@ -21,17 +21,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.betinho89.appdemo",
-      "googleServiceFile": "./google-services.json"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "cbfb8a04-f315-4d88-850d-bfc29f099b56"
-      }
     }
   }
 }

@@ -1,8 +1,28 @@
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { Alert } from 'react-native';
 
-GoogleSignin.configure({
-  offlineAccess: true,
-  webClientId: '659068553409-b7vm61imkgqd3u2k0d4b940qsvpo5gfq.apps.googleusercontent.com'
-});
+import { auth } from '../firebase-config';
 
+/**
+ * Función para iniciar sesión
+ * @param {string} email
+ * @param {string} password
+ */
+export const loginWithEmailPass = async (email, password) => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    Alert.alert('Error', error.message);
+  }
+};
 
+/**
+ * Función para cerrar la sesión actual
+ */
+export const logoutAuth = async () => {
+  try {
+    await auth.signOut();
+  } catch (error) {
+    Alert.alert('Error', error.message);
+  }
+};

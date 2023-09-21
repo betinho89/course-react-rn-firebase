@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Table, Row, Col, Modal, Button, Form, message } from 'antd';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, query, orderBy } from "firebase/firestore";
 
-import UserForm from '../forms/UserForm';
+import StateForm from "../forms/StateForm";
 import { db } from '../firebase-config';
 
 export default function States() {
@@ -75,8 +75,8 @@ export default function States() {
         await setDoc(stateRef, values, {
           merge: true,
         });
-        // await deleteDoc(stateRef);
       }
+      toggleModal();
     } catch (error) {
       message.error(error.message);
     }
@@ -109,7 +109,7 @@ export default function States() {
         onCancel={toggleModal}
         onOk={() => { form.submit(); }}
       >
-        <UserForm user={selectedState} form={form} saveState={saveState} />
+        <StateForm state={selectedState} form={form} saveState={saveState} />
       </Modal>
       <Row>
         <Col span={24}>

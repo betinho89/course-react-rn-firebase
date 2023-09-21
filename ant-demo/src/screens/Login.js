@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Card, Form, Input, Button } from 'antd';
+import { Card, Form, Input, Button, message, Row, Col } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import '../App.css';
-import { useAuth } from '../utils/context'
-import { API_URL } from '../constants';
+import { useAuth } from '../utils/context';
+import { loginWithEmailPass, loginWithGoogle } from '../services/firebase';
 
 function Login() {
   const { login } = useAuth();
@@ -16,20 +16,28 @@ function Login() {
 
   const onSubmit = async (values) => {
     setLoading(true);
-    const response = await fetch(`${API_URL}/authentication`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        strategy: 'local',
-        email: values.username,
-        password: values.password,
-      }),
-    }).then(response => response.json());
-    login(response);
-    setLoading(false);
-    navigate(from, { replace: true });
+    const response = await loginWithEmailPass(values.username, values.password);
+    if (response.code) {
+      message.error(response.message);
+      setLoading(false);
+    } else {
+      login(response);
+      setLoading(false);
+      navigate(from, { replace: true });
+    }
+  };
+
+  const loginGoogle = async () => {
+    setLoading(true);
+    const response = await loginWithGoogle();
+    if (response.code) {
+      message.error(response.message);
+      setLoading(false);
+    } else {
+      login(response);
+      setLoading(false);
+      navigate(from, { replace: true });
+    }
   };
 
   return (
@@ -67,7 +75,14 @@ function Login() {
             <Input.Password />
           </Form.Item>
           <Form.Item wrapperCol={{ span: 24 }}>
-            <Button htmlType='submit' type="primary" loading={loading}>Enviar</Button>
+            <Row justify="space-between">
+              <Col span="auto">
+                <Button htmlType='submit' type="primary" loading={loading}>Enviar</Button>
+              </Col>
+              <Col span="auto">
+                <Button htmlType='button' onClick={loginGoogle} loading={loading}>Iniciar con Google</Button>
+              </Col>
+            </Row>
           </Form.Item>
         </Form>
       </Card>

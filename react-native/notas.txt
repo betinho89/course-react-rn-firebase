@@ -119,3 +119,5 @@ https://icons.expo.fyi/
 49. Uso de real-time (3ra 1:19:00).
 
 Ver documentacion de firestore para el manejo de la base de datos [liga](https://firebase.google.com/docs/firestore/query-data/get-data).
+
+Configuración de permisos y reglas sobre la base de datos [liga](https://firebase.google.com/docs/rules/get-started)

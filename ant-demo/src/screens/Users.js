@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { Table, Row, Col, Modal, Button, Form } from 'antd';
 
 import { useAuth } from "../utils/context";
-import { API_URL } from '../constants';
 import UserForm from '../forms/UserForm';
 
 export default function Users() {
-  const { token } = useAuth();
   const [form] = Form.useForm();
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState(null);
@@ -58,41 +56,11 @@ export default function Users() {
 
   const saveUser = (values) => {
     if (!selectedUser) {
-      fetch(`${API_URL}/users`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...values,
-          rol_id: '642bbd8ce754c42aeaee39d3',
-        }),
-      });
     } else {
-      fetch(`${API_URL}/users/${selectedUser._id}`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...values,
-        }),
-      });
     }
   };
 
   useEffect(() => {
-    fetch(`${API_URL}/users`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      .then(response => response.json())
-      .then(response => {
-        setData(response.data);
-      });
   }, []);
 
   return (

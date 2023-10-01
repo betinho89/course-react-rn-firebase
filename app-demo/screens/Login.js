@@ -40,7 +40,7 @@ export default function Login({ navigation }) {
     <Wrapper>
       <Header showBack={true} showCart={false} />
       <Content>
-        <Title title="Estoy listo para comprar." />
+        <Title title="Estoy listo para comprar" />
         <FormItem label="Nombre de usuario" onChange={onChangeUser}></FormItem>
         <FormItem label="Contraseña" onChange={onChangePass}></FormItem>
         <Button label="ACCEDER" onPress={login} />

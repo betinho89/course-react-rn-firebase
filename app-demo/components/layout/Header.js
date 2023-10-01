@@ -33,7 +33,7 @@ export function Header({
       )}
       <View style={styles.logoContainer}>
         {title && <Text style={styles.title}>{title}</Text>}
-        <Image style={styles.logo} source={require('../../assets/icon.png')} />
+        <Image style={styles.logo} source={require('../../assets/logo.png')} />
       </View>
       {showCart ? (
         <TouchableOpacity>

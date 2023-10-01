@@ -12,12 +12,7 @@ export default function Welcome({ navigation }) {
   return (
     <Wrapper backgroundColor={Colors.black}>
       <Content>
-        <ImageBackground
-          style={styles.background}
-          source={require('../assets/header-background.png')}
-        >
-          <Logo type="white" />
-        </ImageBackground>
+        <Logo type="white" />
         <Title color={Colors.white} title="Bienvenid@ a 4U" />
         <Button onPress={goToLogin} label={"YA TENGO CUENTA"} type="white" />
       </Content>

@@ -24,9 +24,11 @@ export const registerEmailPass = async (user) => {
       email: user.email,
       full_name: user.full_name,
     });
+    return true;
   } catch (error) {
     console.log(error);
     Alert.alert('Error', JSON.stringify(error));
+    return false;
   }
 };
 

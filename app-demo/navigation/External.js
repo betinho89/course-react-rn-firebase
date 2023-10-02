@@ -4,6 +4,7 @@ const Stack = createNativeStackNavigator();
 
 import Login from '../screens/Login';
 import Welcome from '../screens/Welcome';
+import Register from '../screens/Register';
 
 export default function External() {
   return (
@@ -16,6 +17,11 @@ export default function External() {
       <Stack.Screen
         name='Welcome'
         component={Welcome}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='Register'
+        component={Register}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

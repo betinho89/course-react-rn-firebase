@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
     borderRadius: 25,
     paddingVertical: 10,
+    marginBottom: 20,
     width: '100%',
   },
   text: {
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   },
   containerWhite: {
     borderColor: Colors.white,
-    borderRadius: 10,
+    borderRadius: 25,
     borderWidth: 2,
   },
 });

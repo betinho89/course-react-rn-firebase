@@ -11,12 +11,14 @@ export default function Register({ navigation }) {
     full_name: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const goToLogin = () => {
     navigation.navigate("Login");
   };
 
   const registerUser = async () => {
+    setLoading(true);
     const result = await registerEmailPass(user);
     if (result) {
       setUser({
@@ -24,7 +26,10 @@ export default function Register({ navigation }) {
         full_name: "",
         password: "",
       });
+      setLoading(false);
       navigation.navigate("Login");
+    } else {
+      setLoading(false);
     }
   };
 
@@ -56,7 +61,7 @@ export default function Register({ navigation }) {
             setUser((prev) => ({ ...prev, password: value.trim() }))
           }
         ></FormItem>
-        <Button onPress={registerUser} label={"REGISTRARME"} />
+        <Button onPress={registerUser} label={"REGISTRARME"} isLoading={loading} />
         <Button onPress={goToLogin} label={"INICIAR SESIÓN"} />
       </Content>
     </Wrapper>

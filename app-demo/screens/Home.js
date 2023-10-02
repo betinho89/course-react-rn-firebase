@@ -1,28 +1,32 @@
-import { useState, useEffect } from 'react';
-import { FlatList, ScrollView } from 'react-native';
-import { onAuthStateChanged } from 'firebase/auth';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { useState, useEffect } from "react";
+import { FlatList, ScrollView, Alert } from "react-native";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, query, orderBy, onSnapshot, doc, deleteDoc } from "firebase/firestore";
 
-import { Content, Header, Wrapper } from '../components/layout';
-import State from '../components/controls/State';
-import Base from '../components/modals/Base';
-import FormItem from '../components/controls/FormItem';
-import Button from '../components/controls/Button';
+import { Content, Header, Wrapper } from "../components/layout";
+import State from "../components/controls/State";
+import Button from "../components/controls/Button";
+import StateModal from "../components/modals/StateModal";
 
-import { auth, db } from '../firebase-config';
-import { logoutAuth } from '../services/firebase';
+import { auth, db } from "../firebase-config";
+import { logoutAuth } from "../services/firebase";
 
 export default function Home({ navigation }) {
   const [visible, setVisible] = useState(false);
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState({
+    key: "",
+    name: "",
+    code: "",
+    status: false,
+  });
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const subscriber = onSnapshot(
       query(collection(db, "states"), orderBy("name")),
-      querySnapshot => {
+      (querySnapshot) => {
         const states = [];
-        querySnapshot.forEach(doc => {
+        querySnapshot.forEach((doc) => {
           states.push({
             ...doc.data(),
             key: doc.id,
@@ -32,12 +36,12 @@ export default function Home({ navigation }) {
       }
     );
     return subscriber;
-  }, [])
+  }, []);
 
   useEffect(() => {
-    const subscriber = onAuthStateChanged(auth, response => {
+    const subscriber = onAuthStateChanged(auth, (response) => {
       if (!response) {
-        navigation.navigate('Login');
+        navigation.navigate("Login");
       }
     });
     return subscriber;
@@ -47,36 +51,59 @@ export default function Home({ navigation }) {
     await logoutAuth();
   };
 
+  const createNew = () => {
+    setSelected({
+      key: "",
+      name: "",
+      code: "",
+      status: false,
+    });
+    toggleModal();
+  };
+
+  const editState = item => {
+    setSelected(item);
+    toggleModal();
+  };
+
+  const deleteState = async key => {
+    try {
+      // Creamos primero la referencia al documento que vamos a eliminar
+      const stateRef = doc(db, "states", key);
+      // Eliminamos nuestro documento
+      await deleteDoc(stateRef);
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", error.message);
+    }
+  };
+
   const toggleModal = () => {
     setVisible(!visible);
   };
 
   return (
     <Wrapper>
-      <Header title="Dashboard" />
+      <StateModal
+        selected={selected}
+        setSelected={setSelected}
+        visible={visible}
+        onClose={toggleModal}
+      />
+      <Header title="Dashboard" showCart={false} />
       <Content>
-        {visible && (
-          <Base
-            id="modal-state"
-            visible={visible}
-            title={"Editar estado"}
-            onClose={toggleModal}
-          >
-            <FormItem label="Nombre" />
-            <FormItem label="Código" />
-            <FormItem label="Estatus" />
-          </Base>
-        )}
         <Button label="Cerrar sesión" onPress={logout} />
-        <Button label="Abrir modal" onPress={toggleModal} />
-        <ScrollView horizontal={true}>
+        <Button label="Crear nuevo" onPress={createNew} />
+        <ScrollView horizontal={true} style={{ width: '100%' }}>
           <FlatList
             data={data}
-            renderItem={State}
-            keyExtractor={item => item.key}
+            renderItem={({ item }) => (
+              <State item={item} onEdit={editState} onDelete={deleteState} />
+            )}
+            keyExtractor={(item) => item.key}
           />
         </ScrollView>
       </Content>
     </Wrapper>
   );
-};
+}

@@ -2,6 +2,7 @@ import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons, EvilIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
+import { Logo } from './Logo';
 import Colors from '../../constants/Colors';
 import Fonts from '../../constants/Fonts';
 
@@ -33,7 +34,7 @@ export function Header({
       )}
       <View style={styles.logoContainer}>
         {title && <Text style={styles.title}>{title}</Text>}
-        <Image style={styles.logo} source={require('../../assets/logo.png')} />
+        <Logo width={120} />
       </View>
       {showCart ? (
         <TouchableOpacity>
@@ -69,7 +70,5 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.family.bold,
     fontSize: Fonts.size.normal,
     paddingHorizontal: 10,
-    paddingVertical: 5,
-    marginBottom: 10,
   },
 });

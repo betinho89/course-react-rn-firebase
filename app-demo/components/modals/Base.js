@@ -1,11 +1,23 @@
-import { Modal, TouchableOpacity, Text, View, StyleSheet, Dimensions } from 'react-native';
+import {
+  Modal,
+  TouchableOpacity,
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 
-import Colors from '../../constants/Colors';
+import Colors from "../../constants/Colors";
 
-const { height, width } = Dimensions.get('window');
+const { height, width } = Dimensions.get("window");
 
-export default function Base ({
-  id, title, visible, children, onClose
+export default function Base({
+  id,
+  title,
+  visible,
+  children,
+  onClose,
+  onDismiss,
 }) {
   return (
     <Modal
@@ -14,8 +26,9 @@ export default function Base ({
       animationType="fade"
       visible={visible}
       onRequestClose={onClose}
+      onDismiss={onDismiss}
     >
-      <TouchableOpacity style={styles.overlay} />
+      <TouchableOpacity onPress={onClose} style={styles.overlay} />
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           {title && (
@@ -28,12 +41,12 @@ export default function Base ({
       </View>
     </Modal>
   );
-};
+}
 
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingVertical: 20,
   },
   modalView: {
@@ -45,10 +58,10 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   overlay: {
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: "rgba(0,0,0,0.6)",
     height,
     left: 0,
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     width,
   },

@@ -22,8 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.myfirstapp.appdemo",
-      "googleServicesFile": "./google-services.json"
+      "package": "com.myfirstapp.appdemo"
     },
     "web": {
       "favicon": "./assets/favicon.png"

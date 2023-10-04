@@ -572,4 +572,4 @@ useEffect(() => {
 
 A continuación adjunto un video donde se muestra la aplicación final con React Native. En caso de querer levantar su propia aplicación, recordar que hay que instalar los paquetes y cambiar la configuración del archivo de `firebase-config` por su proyecto que hayan creado de firebase.
 
-![](https://obsidiansoft.sfo2.digitaloceanspaces.com/course/app-demo-func.mp4)
+[Ver video](https://obsidiansoft.sfo2.digitaloceanspaces.com/course/app-demo-func.mp4)
